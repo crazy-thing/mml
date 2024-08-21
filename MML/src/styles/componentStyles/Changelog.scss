@@ -1,0 +1,63 @@
+.changelog {
+    width: 60vw;
+
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    //margin-top: 2.1vh;
+}
+
+.changelog-sort-by {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 1%;
+
+    font-family: var(--font-family-secondary);
+    font-size: 1.8vh;
+
+    margin-bottom: 1vh;
+}
+
+
+.changelog-sort-by-header {
+    font-family: var(--font-family-secondary);
+    font-size: 2vh;
+    letter-spacing: 0.5px;
+    margin-right: 1vh;
+    font-weight: bold;
+}
+
+.changelog-sort-by-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .3vh 1.4vh;
+
+    border-radius: 1vh;
+    margin-left: .5vh;
+
+    cursor: pointer;
+}
+
+.changelog-text {
+    color: #fff;
+    font-family: var(--font-family);
+    font-size: 3.5vh;
+    margin: 0;
+    margin-bottom: 1vh; 
+}
+
+.changelog-versions {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+
+}

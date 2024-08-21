@@ -1,0 +1,76 @@
+.screenshots {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow: hidden;
+
+    margin-top: -.3vh;
+}
+
+.screenshots-row {
+    width: 95%;
+    height: 25vh; /* Reduced by 5% */
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 2.5s ease-in-out;
+    margin-bottom: .3vh;
+}
+
+.screenshots-row:last-child {
+    margin-bottom: 0;
+}
+
+.screenshots-row.hidden {
+    opacity: 0;
+}
+
+.screenshots-screenshot {
+    width: 36.2vh; /* Reduced by 5% */
+    height: 20.9vh; /* Reduced by 5% */
+    min-width: 36.2vh; /* Reduced by 5% */
+    min-height: 20.9vh; /* Reduced by 5% */
+    max-width: 36.2vh; /* Reduced by 5% */
+    max-height: 20.9vh; /* Reduced by 5% */
+    cursor: pointer;
+    filter: brightness(80%);
+}
+
+.screenshot-container {
+    position: relative;
+}
+
+.screenshot-container.placeholder {
+    width: 36.2vh; /* Reduced by 5% */
+    height: 20.9vh; /* Reduced by 5% */
+    min-width: 36.2vh; /* Reduced by 5% */
+    min-height: 20.9vh; /* Reduced by 5% */
+    max-width: 36.2vh; /* Reduced by 5% */
+    max-height: 20.9vh; /* Reduced by 5% */
+    cursor: auto!important;
+}
+
+.screenshot-overlay {
+    position: absolute;
+    top: -6.65%; /* Reduced by 5% */
+    left: -5.7%; /* Reduced by 5% */
+    width: 112%;
+    height: 108%;
+    clip-path: inset(calc(.4vh) calc(1.4vh) calc(.4vh) calc(1.4vh));
+    border-radius: 0.95vh; /* Reduced by 5% */
+    cursor: pointer;
+    z-index: 10;
+    filter: brightness(85%);
+}
+
+.screenshot-icon {
+    position: absolute;
+    bottom: 14.25px; /* Reduced by 5% */
+    right: 14.25px; /* Reduced by 5% */
+    width: 2.85vh; /* Reduced by 5% */
+    height: 2.85vh; /* Reduced by 5% */
+    cursor: pointer;
+}

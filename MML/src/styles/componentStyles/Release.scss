@@ -1,0 +1,51 @@
+.release {
+    width: 98%;
+    padding: 1%;
+    height: fit-content;
+
+    margin-bottom: 6vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-family: var(--font-family-secondary);
+    color: #fff;
+    background: #363636c5;
+    border: .7vh solid #808080c5;
+    border-radius: 2vh;
+}
+
+.release-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.release-header-version {
+    font-size: 2.8vh!important;
+    font-weight: bold;
+    text-decoration: underline;
+    margin: 0;
+    margin-bottom: 1vh;
+}
+
+.release-header-date {
+    font-size: 2.3vh;
+    font-weight: 550;
+    font-family: var(--font-family-secondary);
+    font-style: italic;
+    margin: 0;
+    margin-right: 1vh;
+    margin-bottom: 1vh;
+    color: #999999;
+}
+
+.release-changelog {
+    font-size: 2vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.release-changelog * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
