@@ -1,0 +1,26 @@
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-family);
+    cursor: pointer;
+    gap: 1vh;
+    z-index: 10!important;
+}
+
+.button-icon {
+    width: 3.5vh;
+    height: 3.5vh;
+    margin-right: -3vh;
+}
+
+.button-icon.small {
+    width: 3vh;
+    height: 3vh;
+    margin-left: -.5vh;
+    margin-right: -.9vh;
+}
+
+.button:hover {
+    filter: brightness(105%);
+}

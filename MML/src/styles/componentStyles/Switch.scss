@@ -1,0 +1,43 @@
+.switch-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.switch {
+    display: flex;
+    width: 8vh;
+    background-color: #aaa9a9;
+    border-radius: 1vh;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s;
+    font-family: var(--font-family-secondary);
+    font-weight: bold;
+  }
+
+.switch-text {
+    font-family: var(--font-family-secondary);
+    font-size: 2vh;
+    font-weight: 500;
+    color: #dbdbdb;
+    min-width: 11vh;
+    margin-bottom: 1vh;
+}
+
+.switch-part {
+    flex: 1;
+    text-align: center;
+    padding: .5vh;
+    border-radius: 1vh;
+    color: #616161;
+    font-size: 2.2vh;
+}
+
+.switch-part.active {
+    background: #3d3d3d;
+    color: white;
+    border: 1px solid #616161;
+}
+  

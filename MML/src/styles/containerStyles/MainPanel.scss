@@ -1,0 +1,356 @@
+.main-panel {
+    position: absolute;
+    top: 3.704vh;
+    left: 0;
+    min-width: 100%;
+    height: 100%;
+    background: var(--primary-color-trans);
+
+    display: flex;
+    flex-direction: row;
+    z-index: 2;
+    transition: opacity .5s ease;
+    opacity: 0;
+
+}
+
+.main-panel.fadeIn {
+    opacity: 1;
+
+}
+
+.main-panel.fadeOut {
+    opacity: 0;
+}
+
+.main-panel-side {
+    width: 33vh;
+    height: 100vh;
+    background: #373737;
+    z-index: 2;
+
+}
+
+.main-panel-side-header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 2vh;
+
+    margin-top: 1.389vh;
+    margin-bottom: 1.759vh;
+    margin-left: 1.481vh;
+}
+
+.main-panel-side-header-home {
+    width: 5vh;
+    height: 5vh;
+
+    cursor: pointer;
+}
+
+.main-panel-side-header-account {
+    font-family: var(--font-family);
+    font-size: 2.7vh;
+    margin-top: 1.3vh;
+}
+
+.main-panel-side-banner {
+    min-width: 97vh;
+    width: auto;
+    max-width: 97vh;
+    height: 17vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin-left: -1.1vw;
+    padding-inline: 4vh;
+    border-radius: 0 10vh 10vh 0;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 20px 30px, rgba(0, 0, 0, 0.22) 0px 8px 12px;
+    z-index: 2;
+
+}
+
+.main-panel-side-banner-thumbnail {
+    width: 15.4vh;
+    height: 15.4vh;
+    border-radius: 2vh;
+}
+
+.main-panel-side-banner-name {
+    font-family: var(--font-family);
+    font-size: 8vh;
+    margin-left: 3vh;
+}
+
+.main-panel-right {
+    width: 100%;
+    height: fit-content;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.main-panel-right-changelog {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-height: 66vh;
+    overflow-y: scroll;
+
+}
+
+
+.main-panel-right-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    min-height: 100vh;
+    margin-top: 32vh;
+    height: fit-content;
+    overflow-y: scroll;
+    z-index: 2;
+}
+
+.main-panel-right-title.changelogs {
+    margin-bottom: 0;
+}
+
+.main-panel-right-title {
+    z-index: 2;
+    letter-spacing: .2vh;
+    margin-bottom: 1vh;
+    font-size: 4.2vh;
+    font-family: var(--font-family);
+    text-decoration: underline;
+}
+
+
+.main-panel-overlay {
+    width: 105%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 10%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.main-panel-right-background {
+    position: absolute;
+    top: -1%;
+    left: -1%;
+    width: 105%;
+    height: 105%;
+    filter: blur(0.3vw);
+    pointer-events: none;
+
+}
+
+.main-panel-side-main-button {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 9.1vh;
+    margin-top: 4.167vh;
+    z-index: 1;
+}
+
+.main-panel-side-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 4.259vh;
+    margin-left: 1.389vh;
+    gap: 1.8vh;
+    font-family: var(--font-family);
+    font-size: 3.8vh;
+    color: #b4b4b4;
+}
+
+.main-panel-side-buttons-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2vh;
+    cursor: pointer;
+}
+
+.main-panel-rendered-item {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 13vh;
+    cursor: pointer;
+}
+
+.main-panel-side-buttons-item-text.active {
+    color: #fff;
+}
+
+.main-panel-side-buttons-item-dot {
+    width: 1.481vh;
+    height: 1.481vh;
+    margin-left: -30%;
+    transition: margin-left 0.3s ease-in-out;
+    will-change: margin-left;
+}
+
+.main-panel-side-buttons-item-dot.active {
+    margin-left: 0%;
+}
+
+
+.main-panel-side-buttons-button {
+    cursor: pointer;
+}
+
+.main-panel-side-buttons-button.ss {
+    color: #fff;
+    font-size: 4vh;
+}
+
+.main-panel-side-buttons-button.cl {
+    color: #fff;
+    font-size: 4vh;
+}
+
+
+.item-out-left, .item-out-right, .item-in-left, .item-in-right {
+    will-change: transform, animation;
+}
+
+
+
+.item-out-left {
+    animation: outLeftItem 0.3s ease-in-out forwards;
+}
+
+.item-out-right {
+    animation: outRightItem 0.3s ease-in-out forwards;
+}
+
+.item-in-left {
+    animation: inLeftItem 0.3s ease-in-out forwards;
+}
+
+.item-in-right {
+    animation: inRightItem 0.3s ease-in-out forwards;
+}
+
+
+
+@keyframes outLeftItem {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-100%);
+    }
+}
+
+@keyframes outRightItem {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(100%);
+    }
+}
+
+@keyframes inLeftItem {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes inRightItem {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+}
+}
+
+
+.main-panel-stop-game-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+}
+
+.main-panel-stop-game {
+    width: 80vh;
+    padding: 0 4vh;
+    height: 44vh;
+    border-radius: 3.4vh;
+    background: #1a1a1a;
+    border: 0.2vh solid #fff;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6vh;
+}
+
+.main-panel-stop-game-text {
+    font-family: var(--font-family);
+    font-size: 6vh;
+    text-align: center;
+    color: #fff;
+}
+
+.main-panel-stop-game-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 5.6vh;
+}
+
+.main-panel-stop-game-buttons-item {
+    width: 24vh;
+    height: 8.4vh;
+    border-radius: 0.9vh;
+    font-family: var(--font-family);
+    font-size: 3.6vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.main-panel-stop-game-buttons-item.yes {
+    background: #49a749;
+}
+
+.main-panel-stop-game-buttons-item.no {
+    background: #ce4949;
+}

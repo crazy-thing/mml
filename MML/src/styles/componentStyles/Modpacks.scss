@@ -1,0 +1,52 @@
+.modpacks {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    width: 100%;
+    max-width: 100%;
+    height: fit-content;
+    max-height: 60%;
+    overflow-y: auto;
+    transition: max-height 0.4s ease-in-out, border-radius 0.4s ease-in-out, margin-bottom 0.4s ease-in-out;
+    margin-top: 4vh;
+
+    overflow-x: hidden;
+  }
+  
+  .modpacks-modpack {
+    width: 15vh;
+    height: 15vh;
+    max-height: 15vh;
+    min-height: 15vh;
+    padding: 1vh;
+    padding-left: 2vh;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    cursor: pointer;
+  }
+
+  .modpacks-row {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .modpacks-modpack-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20%;
+  }
+
+  .modpacks-modpack-thumbnail.active {
+    animation: thumbActive 0.3s ease-in-out;
+  }
+  
+  
+  @keyframes thumbActive {
+    from {
+        transform: scale(90%);
+    }
+    to {
+        transform: scale(102%);
+    }
+}
