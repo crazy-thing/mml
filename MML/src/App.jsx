@@ -9,6 +9,7 @@ import TopBar from './components/TopBar';
 import Home from './containers/Home';
 import NewSettings from './containers/NewSettings';
 import MainPanelNew from './containers/MainPanelNew';
+import LauncherChangelog from './components/LauncherChangelog';
 
 function App() {
   const { ipcRenderer } = window.require('electron');
@@ -32,6 +33,7 @@ function App() {
   const [animationClass, setAnimationClass] = useState('');
 
   const [showScroll, setShowScroll] = useState(true);
+  const [showChangelog, setShowChangelog] = useState(false);
 
   const [showConfetti, setShowConfetti] = useState(false);
   const [confettiInstances, setConfettiInstances] = useState([]);
@@ -60,7 +62,6 @@ function App() {
   };
 
   const handleSelectModpack = (modpack) => {
-    console.log("selecting!!!!");
     setSelectedModpack(modpack);
     setSelectedModpackId(modpack.id);
     localStorage.setItem('lastSelectedModpack', JSON.stringify(modpack.id));
@@ -212,6 +213,21 @@ function App() {
       setProfile(result);
     });
 
+
+    ipcRenderer.send('get-version');
+    ipcRenderer.on('version', async (event, version) => {
+    const lastVersion = localStorage.getItem('lastVersion');
+
+      console.log(`Prev ${lastVersion} vs  new ${version}`);
+      if (lastVersion !== version) {
+        setShowChangelog(true);
+        console.log("New version available");
+        localStorage.setItem('lastVersion', version);
+      }        
+    });
+
+
+
     return () => {
       ipcRenderer.removeAllListeners('sign-in-reply');
       ipcRenderer.removeAllListeners('default-account-reply');
@@ -244,8 +260,26 @@ function App() {
       <LoadingScreen isLoading={isLoading} setShowBars={setShowBars} isMainRendered={isMainRendered} />
       <TopBar />
 
-      {showHome && <Home  modpacks={allModpacks} toggleShowSettings={toggleShowSettings} handleSelectModpack={handleSelectModpack} setTransformOrigin={setTransformOrigin} />}
-      {showSettings && <NewSettings toggleShowHome={toggleShowHome} profile={profile} handleSignOut={handleSignOut} handleSignIn={handleSignIn} />}
+      <div className="transition-container">
+        <div className={`panel ${showHome ? "slide-in-right" : "slide-out-right"}`}>
+          <Home 
+            modpacks={allModpacks} 
+            toggleShowSettings={toggleShowSettings} 
+            handleSelectModpack={handleSelectModpack} 
+            setTransformOrigin={setTransformOrigin} 
+            allInstalledVersions={allInstalledVersions} 
+          />
+        </div>
+        <div className={`panel ${showSettings ? "slide-in-left" : "slide-out-left"}`}>
+          <NewSettings 
+            toggleShowHome={toggleShowHome} 
+            profile={profile} 
+            handleSignOut={handleSignOut} 
+            handleSignIn={handleSignIn} 
+          />
+        </div>
+    </div>
+
       {allModpacks.map(mp => (
         <MainPanelNew 
           key={mp.id}
@@ -258,6 +292,12 @@ function App() {
           profile={profile}
           />
       ))}
+
+      {showChangelog && (
+        <div className='app-launcher-changelog' onClick={() => setShowChangelog(false)}>
+          <LauncherChangelog  ver={localStorage.getItem("lastVersion")} />
+        </div>
+        )}
 
       {/* 
 

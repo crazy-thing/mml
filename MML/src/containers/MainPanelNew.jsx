@@ -4,7 +4,7 @@ import Button from '../components/Button';
 import ConfirmDelete from '../components/ConfirmDelete';
 import Changelog from '../components/Changelog';
 import Screenshots from '../components/Screenshots';
-import { close, dot, dots, folderIcon, house } from '../assets/exports';
+import { arrows, close, deleteIcon, dot, dots, folderIcon, house, trashIcon } from '../assets/exports';
 import PreloadImages from '../components/PreloadImages';
 import ScreenshotViewer from '../components/ScreenshotViewer';
 import Switch from '../components/Switch';
@@ -42,6 +42,7 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
   const [index, setIndex] = useState(null);
 
   const [itemClass, setItemClass] = useState(null);
+  const [trans, setTrans] = useState(null);
 
   const [renderContent, setRenderContent] = useState(true);
   const [gameRunning, setGameRunning] = useState(false);
@@ -131,13 +132,13 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
 
   const handleChangeItem = (item) => {
     if (selectedItem === item) return;
-
     if (item === "changelogs") {
       setItemClass('item-out-left');
     } else if (item === "screenshots") {
       setItemClass('item-out-right');
     }
     setNextItem(item);
+    setTrans("font-size 0.4s ease");
   };
 
   const handleOverflowCheck = () => {
@@ -236,6 +237,7 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
       if (lastInstalledVersion != null) {
         if (modpack.mainVersion.id === "null") {
           setUpdate(false);
+          setOldInstall(true);
         } else {
           setUpdate(true);
           if (lastInstalledVersion != null) {
@@ -244,8 +246,8 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
         }
       }
     }
-    setSelectedItem("screenshots");
-    setNextItem("screenshots");
+    //setSelectedItem("screenshots");
+    //setNextItem("screenshots");
     if (modpack && modpack.mainVersion && modpack.mainVersion.id == "null") {
       setSelectedItem("");
       setNextItem("");
@@ -298,6 +300,7 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
           const currentModpackId = modpack.id.toString().trim(); 
           console.log(`Received modpackId: [${modpackId}]`);
           console.log(`Current modpack.id: [${currentModpackId}]`);
+          fetchData();
       
           if (modpackId === currentModpackId) {
               localStorage.setItem(`lastInstalledVersion${modpack && modpack.id}`, JSON.stringify(modpack.mainVersion));
@@ -347,6 +350,7 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
           setSwitchActive(false);
           setOldInstall(false);
           setUpdate(false);
+          fetchData();
           console.log(`Switch active is: ${switchActive}`);
           localStorage.setItem(`isActivated-${modpack.id}`, false);
         }
@@ -397,7 +401,7 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
 
   const installBtnStyle = {
     width: "14.25vw",
-    height: "100%",
+    height: "9.5vh",
     marginLeft: "0vh", // Scaled down by 5%,
     borderRadius: "10px",
     //border: `2px solid ${update ? "#1383df" : "#49a749"}`,
@@ -407,7 +411,7 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
   
   const installedBtnStyle = {
     width: "14.25vw",
-    height: "100%",
+    height: "9.5vh",
     marginLeft: "0vh", // Scaled down by 5%,
     borderRadius: update ? "10px" : "10px 0px 0px 10px",
     //border: `2px solid ${update ? "#1383df" : "#49a749"}`,
@@ -417,7 +421,7 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
   
   const uninstallBtnStyle = {
     width: "14.25vw",
-    height: "100%",
+    height: "9.5vh",
     marginLeft: "0vh", // Scaled down by 5%,
     borderRadius: "10px 0px 0px 10px",
     //border: "2px solid #c40808",
@@ -426,7 +430,7 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
   
   const stopBtnStyle = {
     width: "14.25vw",
-    height: "100%",
+    height: "9.5vh",
     marginLeft: "0vh", // Scaled down by 5%,
     borderRadius: "10px",
     //border: "2px solid #1383df",
@@ -437,7 +441,7 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
   
   const comingSoonBtnStyle = {
     width: "14.25vw",
-    height: "8.55vh",
+    height: "9.5vh",
     marginLeft: "0vh", // Scaled down by 5%,
     borderRadius: "10px",
     //border: "2px solid #898989",
@@ -447,7 +451,7 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
 
   const greenBtnStyle = {
     width: "14.25vw",
-    height: "8.55vh",
+    height: "9.5vh",
     marginLeft: "0vh", // Scaled down by 5%,
     borderRadius: "10px",
     //border: `2px solid "#49a749"`,
@@ -457,7 +461,7 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
 
   const blueBtnStyle = {
     width: "14.25vw",
-    height: "100%",
+    height: "9.5vh",
     marginLeft: "0vh", // Scaled down by 5%,
     borderRadius: "10px",
     //border: `2px solid #1383df`,
@@ -508,23 +512,49 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
             />
           ) : (
             <Button
-                text={isInstalling ? `${buttonText}%` : modpack && modpack.mainVersion && modpack.mainVersion.zip === "null" ? "COMING SOON!" : update && oldInstall ? "UPDATE" : showLiteUpdate && installedVersion ? "UPDATE" : installedVersion && gameRunning ? "RUNNING"
+                text={isInstalling ? `${buttonText}%` : modpack && (modpack.mainVersion && modpack.mainVersion.zip === "null") || (modpack && modpack.versions && modpack.versions.length === 0) ? "COMING SOON!" : update && oldInstall ? "UPDATE" : showLiteUpdate && installedVersion ? "UPDATE" : installedVersion && gameRunning ? "RUNNING"
                 : installedVersion ? "PLAY" : "INSTALL"}
-                style={modpack && modpack.mainVersion && modpack.mainVersion.zip === "null" ? comingSoonBtnStyle : showLiteUpdate && installedVersion ? blueBtnStyle : gameRunning ? stopBtnStyle : installBtnStyle}
+                style={modpack && (modpack.mainVersion && modpack.mainVersion.zip === "null") || (modpack && modpack.versions && modpack.versions.length === 0) ? comingSoonBtnStyle : showLiteUpdate && installedVersion ? blueBtnStyle : gameRunning ? stopBtnStyle : installBtnStyle}
                 textStyle={{ fontSize: "3.6vh", color: "white" }}
-                onClick={gameRunning ?  () => setShowStopGame(true) : modpack && modpack.mainVersion && modpack.mainVersion.zip === "null" ? console.log("coming soon!") : update && !switchActive && oldInstall ? () => handleInstallModpack(modpack) : update && switchActive && oldInstall ? () => handleInstallModpack(modpack, true)
+                onClick={gameRunning ?  () => setShowStopGame(true) : isInstalling ? console.log("please wait for installation to finish") : (modpack.mainVersion && modpack.mainVersion.zip === "null") || (modpack && modpack.versions && modpack.versions.length === 0) ? console.log("coming soon!") : update && !switchActive && oldInstall ? () => handleInstallModpack(modpack) : update && switchActive && oldInstall ? () => handleInstallModpack(modpack, true)
                 : installedVersion ? () => handleLaunch() 
                 : modpack && modpack.mainVersion && modpack.mainVersion.liteZip ? () => setShowVersionSelection(true) : () => handleInstallModpack(modpack)}
             />
           )}
+        
+          <p className='main-panel-side-main-button-install'>{isInstalling && installText && installText}</p>
+
+          {/* 
             {(oldInstall || installedVersion) && !isInstalling && !gameRunning && !showVersionSelection && (
               <DropDown toggleUninstall={toggleUninstall} update={showUninstall} handleOpenFolder={handleOpenFolder}
                         setShowVersionSelection={setShowVersionSelection} switchActive={switchActive} showLiteUpdate={showLiteUpdate} 
                         oldInstall={oldInstall} modpack={modpack} />       
             )}
+            */}
         </div>
 
+        {(oldInstall || installedVersion) && !isInstalling && !showVersionSelection && !update && (
+
+        <div className='main-panel-side-icons'>
+            <span className={`main-panel-side-icons-icon  ${gameRunning || modpack && modpack.mainVersion && modpack.mainVersion.liteZip == "" || modpack && modpack.mainVersion && modpack.mainVersion.liteZip == "null" ? "running" : ""}`} onClick={setShowVersionSelection}>
+              <img src={arrows} className={`main-panel-side-icons-icon-img`} draggable={false}  />
+            </span>
+            <span className='main-panel-side-icons-icon' onClick={handleOpenFolder}>
+              <img src={folderIcon} className='main-panel-side-icons-icon-img' draggable={false}  />
+            </span>
+            <span className={`main-panel-side-icons-icon  ${gameRunning ? "running" : ""}`} onClick={toggleUninstall}>
+              <img src={trashIcon} className='main-panel-side-icons-icon-img' draggable={false}  />
+            </span>
+        </div>
+        )}
+
         <div className='main-panel-side-buttons'>
+          <p className={`main-panel-side-buttons-item-text ${modpack && (modpack.mainVersion && modpack.mainVersion.zip === "null") || (modpack && modpack.versions && modpack.versions.length === 0) ? "coming-soon" : nextItem === "screenshots" ? "active" : ""}`} style={{transition: trans}} onTransitionEnd={() => setTrans("font-size 0s ease")} 
+             onClick={modpack && modpack.mainVersion && modpack.mainVersion.id == "null" ? console.log("coming soon!") : () => handleChangeItem("screenshots")}>SCREENSHOTS</p>
+          <div style={{width: "4.3vh", height: "0.46vh", background: "#818181"}} />
+          <p className={`main-panel-side-buttons-item-text ${modpack && (modpack.mainVersion && modpack.mainVersion.zip === "null") || (modpack && modpack.versions && modpack.versions.length === 0) ? "coming-soon" : nextItem === "changelogs" ? "active" : ""}`} style={{transition: trans}} onTransitionEnd={() => setTrans("font-size 0s ease")}
+             onClick={modpack && modpack.mainVersion && modpack.mainVersion.id == "null" ? console.log("coming soon!") : () => handleChangeItem("changelogs")}>CHANGELOGS</p>
+        {/* 
             <span className='main-panel-side-buttons-item' onClick={modpack && modpack.mainVersion && modpack.mainVersion.id == "null" ? console.log("coming soon!") : () => handleChangeItem("screenshots")}>
               <img src={dot} className={`main-panel-side-buttons-item-dot ${nextItem === "screenshots" ? "active" : ""}`}/>
               <p className={`main-panel-side-buttons-item-text ${nextItem === "screenshots" ? "active" : ""}`}>SCREENSHOTS</p>
@@ -533,6 +563,7 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
               <img src={dot} className={`main-panel-side-buttons-item-dot ${nextItem === "changelogs" ? "active" : ""}`}/>
               <p className={`main-panel-side-buttons-item-text ${nextItem === "changelogs" ? "active" : ""}`}>CHANGELOGS</p>
             </span>
+        */}
         </div>
       </div>
 

@@ -19,8 +19,6 @@
   z-index: -1;
   filter: blur(0.3vw);
   overflow: hidden;
-
-
 }
 
 .app-background-next {
@@ -37,6 +35,21 @@
 
 .app-main-panel-container {
   width: 100%;
+}
+
+.app-launcher-changelog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
 }
 
 @keyframes fade {
@@ -90,4 +103,32 @@
   to {
     transform: translateX(-100%); 
   }
+}
+
+.transition-container {
+  width: 100%;
+  height: 100%;
+}
+
+.panel {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease-in-out;
+}
+
+.slide-in-left {
+  transform: translateX(0%);
+}
+
+.slide-out-right {
+  transform: translateX(100%);
+}
+
+.slide-in-right {
+  transform: translateX(0%);
+}
+
+.slide-out-left {
+  transform: translateX(-100%);
 }

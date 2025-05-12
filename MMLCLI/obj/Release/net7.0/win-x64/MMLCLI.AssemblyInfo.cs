@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MMLCLI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+471ebc2281ab602b2f302e579e4273999b2ae08b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0b24bcf33e87a8336c58a89eb4761060f2ac52de")]
 [assembly: System.Reflection.AssemblyProductAttribute("MMLCLI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MMLCLI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

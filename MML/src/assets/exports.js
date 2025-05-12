@@ -24,6 +24,8 @@ export { default as house } from './house.svg';
 export { default as settings } from './gear-solid.svg'
 export { default as dot } from './dot.svg';
 export { default as closeRed } from './closeRed.svg';
+export { default as arrows } from './arrows.svg';
+
 
 
 

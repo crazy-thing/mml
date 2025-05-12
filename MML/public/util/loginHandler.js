@@ -36,7 +36,6 @@ const getDefaultAccount = async () => {
 };
 
 const signIn = async () => {
-    try {
         const authManager = new Auth("select_account");
         const appDataPath = getAppDataPath();
         const tokenPath = path.join(appDataPath, 'token.json');
@@ -48,38 +47,45 @@ const signIn = async () => {
         let success;
 
         if (fs.existsSync(userAccountsPath)) {
+            try {
             const oldToken = readDataFromFile(tokenPath);
             const newToken = tokenUtils.fromToken(authManager, oldToken);
 
+            console.log("new token", newToken);
             const result = await newToken.refresh(false);
             // should refresh when token expires
-                        
+
             MSession = {
                 Username: result.mclc().name,
                 UUID: result.mclc().uuid,
                 AccessToken: result.mclc().access_token,    
-                ClientToken: result.mclc().client_token,
+                ClientToken: result.mclc().client_token, 
             };
 
 
             const defaultAcc = await getDefaultAccount();
-
 
             try {
                 await fs.promises.unlink(userAccountsPath);
             } catch (error) {
                 console.error(error);
             }
+            
 
             UserAccount = {
                 GamerTag: defaultAcc.GamerTag,
                 ProfilePicture: defaultAcc.ProfilePicture,
-                MSession: MSession
+                MSession: MSession,
             };
-
-
+        } catch (error) { 
+            console.error("Error refreshing token:", error);
+            await fs.promises.unlink(tokenPath);
+            await fs.promises.unlink(userAccountsPath);
+            console.log("Token expired, please sign in again.");
+            return null;
+        }
         } else {
-
+            try {
             const xboxManager = await authManager.launch("electron");
             const token = await xboxManager.getMinecraft();
             const xboxSocial = await xboxManager.getSocial();
@@ -99,20 +105,24 @@ const signIn = async () => {
             UserAccount = {
                 GamerTag: xboxProfile.gamerTag,
                 ProfilePicture: xboxProfile.profilePictureURL,
-                MSession: MSession
+                MSession: MSession,
             };
-
-            try {
-                await fs.promises.unlink(userAccountsPath);
-            } catch (error) {
-                console.error(error);
+            
+            if (fs.existsSync(userAccountsPath)) {
+                try {
+                    await fs.promises.unlink(userAccountsPath);
+                } catch (error) {
+                    console.error(error);
+                }
             }
+
+
+        } catch (error) {
+            console.error("Error logging in with new account:", error);
         }
+    }
 
         return UserAccount;        
-    } catch (error) {
-        console.log('An error occurred: ', error);
-    }
 };
 
 module.exports = { 

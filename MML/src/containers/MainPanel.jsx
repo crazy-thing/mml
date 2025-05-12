@@ -9,7 +9,7 @@ import PreloadImages from '../components/PreloadImages';
 import ScreenshotViewer from '../components/ScreenshotViewer';
 import Switch from '../components/Switch';
 
-const MainPanel = ({ modpack, profile, handleSetNoChange, animationClass, handleAnimationEnd, handleInAnimationEnd, showScroll, style, selectedModpackId, setIsMainRendered }) => {
+const MainPanel = ({ modpack, profile, handleSetNoChange, fetchData, animationClass, handleAnimationEnd, handleInAnimationEnd, showScroll, style, selectedModpackId, setIsMainRendered }) => {
 
   const { ipcRenderer } = window.require('electron');
   const API = "https://minecraftmigos.me/uploads/thumbnails/";
@@ -258,7 +258,8 @@ const MainPanel = ({ modpack, profile, handleSetNoChange, animationClass, handle
           const currentModpackId = modpack.id.toString().trim(); 
           console.log(`Received modpackId: [${modpackId}]`);
           console.log(`Current modpack.id: [${currentModpackId}]`);
-      
+          fetchData();
+              
           if (modpackId === currentModpackId) {
               localStorage.setItem(`lastInstalledVersion${modpack && modpack.id}`, JSON.stringify(modpack.mainVersion));
               setInstalledVersion(modpack.mainVersion);
@@ -307,6 +308,7 @@ const MainPanel = ({ modpack, profile, handleSetNoChange, animationClass, handle
           setVerInstalling(null);
           setShowUninstall(false);
           setSwitchActive(false);
+          fetchData();
           console.log(`Switch active is: ${switchActive}`);
           localStorage.setItem(`isActivated-${modpack.id}`, false);
         }

@@ -14,26 +14,27 @@
 
 .confirm-delete {
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
-    background: #0a0a0a;
-    padding: 2vh;
-    width: 20%;
-    height: max-content;
-    gap: 1.5vh;
-    border-radius: 14px;
+    background: #1a1a1a;
+    width: 88.9vh;
+    height: 41.1vh;
+    border-radius: 3.4vh;
+    border: .4vh solid #fff;
     color: #fff;
-    font-family: var(--font-family-secondary);
-}
-
-.confirm-delete-header {
-    font-size: 4vh;
-    font-weight: bold;
-    margin: 0;
+    font-family: var(--font-family);
 }
 
 .confirm-delete-body {
-    font-weight: 100;
-    font-size: 2vh;
+    flex-direction: row;
+    font-size: 6vh;
+    margin: 0;
+    margin-bottom: 4vh;
+}
+
+.confirm-delete-body-uninstall {
+    color: #ce4949;
     margin: 0;
 }
 
@@ -42,16 +43,17 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-    gap: 5%;
+    gap: 5.6vh;
 }
 
 .confirm-delete-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 9vh;
-    height: 4vh;
-    border-radius: 2px;
+    width: 24vh;
+    height: 8.4vh;
+    border-radius: 1vh;
+    
 
     cursor: pointer;
 }
@@ -59,6 +61,6 @@
 .confirm-delete-button-text {
     margin: 0;
     color: #fff;
-    font-size: 2vh;
-    font-family: var(--font-family-secondary);
+    font-size: 4vh;
+    font-family: var(--font-family);
 }

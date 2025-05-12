@@ -52,7 +52,7 @@
           "dependencies": {
             "CmlLib.Core": {
               "target": "Package",
-              "version": "[3.3.9, )"
+              "version": "[3.3.10, )"
             },
             "CmlLib.Core.Auth.Microsoft": {
               "target": "Package",
@@ -68,7 +68,7 @@
             },
             "Newtonsoft.Json": {
               "target": "Package",
-              "version": "[13.0.3, )"
+              "version": "[13.0.2, )"
             }
           },
           "imports": [

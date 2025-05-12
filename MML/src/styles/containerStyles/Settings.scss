@@ -40,22 +40,41 @@
 }
 
 .settings-body-left {
+    position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: flex-start;
 
-    width: 45vh;
+    width: 59vh;
     border-radius: 3.1vh;
     margin-left: 13vh;
 
     background: #222222;
 }
 
+.settings-body-left-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    width: 33vh;
+}
+
+.settings-body-left-variants {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
 .settings-body-right {
-    margin-left: 6.3vh;
+    margin-left: 12.1vh;
     background: #222222;
-    width: 100vh;
+    width: 79vh;
     height: 62vh;
     border-radius: 3.1vh;
     display: flex;
@@ -71,9 +90,15 @@
     margin-top: 4.1vh;
 }
 
+.settings-profile-skin {
+    height: 38vh;
+    margin-top: .5vh;
+    margin-bottom: auto;
+}
+
 .settings-profile-name {
-    margin-top: 4vh;
-    font-size: 4vh;
+    margin-top: 2vh;
+    font-size: 3vh;
     font-family: var(--font-family);
 }
 
@@ -87,16 +112,28 @@
     border-radius: .9vh;
     font-family: var(--font-family);
     font-size: 3.3vh;
-    margin-top: auto;
-    margin-bottom: 6.4vh;
 
     cursor: pointer;
 }
 
 .settings-body-button.signIn {
-    margin-top: 60%;
+    position: absolute;
+    top: 70%;
+    left: 35%;
     background: #fff;
     color: #252525;
+    margin-bottom: 3vh;
+}
+
+.settings-body-button.signOut {
+    margin-bottom: 3vh;
+}
+
+.settings-body-button.skin {
+    background: #868686;
+    color: #fff;
+    margin-top: auto;
+    margin-bottom: 1vh;
 }
 
 .settings-setting-header-text {
@@ -108,18 +145,20 @@
 
 .settings-body-ram-text-container {
     display: flex;
-    justify-self: flex-start;
-    align-self: flex-start;
-    margin-left: 20.4vh;
     gap: 1vh;
-    max-width: 40vh;
     color: #d9d9d9;
+}
+
+.settings-body-ram-text {
+    font-size: 2.3vh;
+    font-family: var(--font-family-secondary);
+    margin: 0;
 }
 
 
 .settings-about {
     position: absolute;
-    bottom: 1vh;
+    bottom: 0vh;
     left: 1vh;
     display: flex;
     flex-direction: column;
@@ -154,4 +193,51 @@
     color: #d9d9d9;
     font-size: 2vh;
     margin-left: .3vh;
+}
+
+.settings-version {
+    position: absolute;
+    bottom: 4vh;
+    right: 1vh;
+    font-size: 2vh;
+    color: #d9d9d9;
+    cursor: pointer;
+}
+
+.circle-toggle {
+    display: flex;
+    gap: 2.5vh;
+}
+
+.circle-toggle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1vh;
+}
+
+.circle-option {
+    width: 2.6vh;
+    height: 2.6vh;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: .25vh solid white; 
+}
+
+.circle-option-text {
+    font-size: 3vh;
+    font-family: var(--font-family);
+    color: white;
+    margin: 0;
+}
+
+
+.circle-option-selected.active {
+    width: 1.9vh;
+    height: 1.9vh;
+    border-radius: 50%;
+    background-color: #fff;
 }

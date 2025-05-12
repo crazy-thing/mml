@@ -47,7 +47,6 @@ namespace MMLCLI.Util
             try
             {
                 Installer installer = new Installer();
-
                 ModpackModel existingModpack = modpacks.FirstOrDefault(mp => mp.id == modpack.id);
                 if (existingModpack == null)
                 {
@@ -73,7 +72,14 @@ namespace MMLCLI.Util
                     existingModpack.mainVersion.modName = "fabric";
                     existingModpack.mainVersion.ParentModpackName = existingModpack.name;
                     SaveModpacks();
-                    await installer.InstallFabricVersion(existingModpack.mainVersion, modpack.id);
+                    try
+                    {
+                        await installer.InstallFabricVersion(existingModpack.mainVersion, modpack.id);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("An error occurred while installing fabric version: ", ex);
+                    }
                 }
                 else if (forgeLoader != null)
                 {
@@ -91,6 +97,7 @@ namespace MMLCLI.Util
                 {
                     Console.WriteLine("No mod loader");
                 }
+
             }
             catch (Exception ex)
             {
@@ -134,6 +141,7 @@ namespace MMLCLI.Util
 
         public static void LoadModpacks()
         {
+            try {
             if (File.Exists(modpacksJsonFile))
             {
                 string jsonData = File.ReadAllText(modpacksJsonFile);
@@ -143,6 +151,12 @@ namespace MMLCLI.Util
             {
                 modpacks = new ObservableCollection<ModpackModel>();
             }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while loading modpacks.json: ");
+            }
+
         }
 
         public static string CheckForInstalledVersions()
@@ -168,11 +182,12 @@ namespace MMLCLI.Util
                     Directory.CreateDirectory(Path.GetDirectoryName(modpacksJsonFile));
                 }
                 string jsonData = JsonSerializer.Serialize(modpacks, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(modpacksJsonFile, jsonData); 
+                File.WriteAllText(modpacksJsonFile, jsonData);
+ 
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine("An error occurred while saving modpacks.json: ");
             }
         }
     }

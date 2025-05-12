@@ -39,7 +39,7 @@ namespace MMLCLI.Core
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine("Error initializing launcher: " + ex.Message);
                 throw;
             }
         }
@@ -70,7 +70,10 @@ namespace MMLCLI.Core
         {
             try
             {
-                InitializeLauncher(version, modpackId);
+                Console.WriteLine($"Installing fabric version {version.modLoader} for modpack {modpackId}");
+                Console.WriteLine($"Minecraft version: {version.mcVersion}");
+                CMLauncher newLauncher = InitializeLauncher(version, modpackId);
+                
 
                 launcher.ProgressChanged += (s, e) =>
                 {
@@ -79,20 +82,21 @@ namespace MMLCLI.Core
 
                 var fabricVersionLoader = new FabricVersionLoader
                 {
-                    LoaderVersion = version.modLoader
+                    LoaderVersion = version.modLoader.ToString()
                 };
-                var fabricVersions = await fabricVersionLoader.GetVersionMetadatasAsync();
-
+                Console.WriteLine($"Loader Version: {fabricVersionLoader.LoaderVersion}");
+                var fabricVersions = fabricVersionLoader.GetVersionMetadatas();
                 var fullName = $"fabric-loader-{version.modLoader}-{version.mcVersion}";
                 Console.WriteLine(fullName);
                 var fabric = fabricVersions.GetVersionMetadata(fullName);
                 await fabric.SaveAsync(path);
-                await launcher.GetAllVersionsAsync();
+                await newLauncher.GetAllVersionsAsync();
                 Console.WriteLine($"Install-Complete {modpackId}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Error installing fabric version {ex}");
+                await InstallFabricVersion(version, modpackId);
             }
         }
 

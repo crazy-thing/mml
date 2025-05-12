@@ -24,6 +24,7 @@
 }
 
 .main-panel-side {
+    position: relative;
     width: 33vh;
     height: 100vh;
     background: #373737;
@@ -58,9 +59,7 @@
 }
 
 .main-panel-side-banner {
-    min-width: 97vh;
-    width: auto;
-    max-width: 97vh;
+    width: max-content;
     height: 17vh;
     display: flex;
     flex-direction: row;
@@ -145,26 +144,33 @@
 .main-panel-right-background {
     position: absolute;
     top: -1%;
-    left: -1%;
-    width: 105%;
-    height: 105%;
+    left: 8.5%;
+    width: 101%;
+    height: 101%;
     filter: blur(0.3vw);
     pointer-events: none;
-
 }
+
 
 .main-panel-side-main-button {
     position: relative;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 4.3vh;
     width: 100%;
-    height: 9.1vh;
-    margin-top: 4.167vh;
     z-index: 1;
 }
 
+.main-panel-side-main-button-install {
+    margin: 0;
+    margin-top: .5vh;
+    font-size: 2vh;
+    font-family: var(--font-family);
+}
+
+/* OLD
 .main-panel-side-buttons {
     display: flex;
     flex-direction: column;
@@ -175,6 +181,54 @@
     font-family: var(--font-family);
     font-size: 3.8vh;
     color: #b4b4b4;
+}
+*/
+
+.main-panel-side-icons {
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 3vh;
+    margin-top: 1vh;
+}
+
+.main-panel-side-icons-icon {
+    width: 5.2vh;
+    height: 5.2vh;
+    background: #1e1e1e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1vh;
+    cursor: pointer;
+}
+
+.main-panel-side-icons-icon-img {
+    width: 3vh;
+    height: 3vh;
+}
+
+.main-panel-side-icons-icon.running {
+    opacity: 0.4; /* Adjust opacity to make it appear darker */
+    filter: brightness(40%); /* Further darken the item */
+    pointer-events: none; /* Disable clicking */
+}
+.main-panel-side-buttons {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: fit-content;
+    gap: .5vh;
+    font-family: var(--font-family);
+    font-size: 3.8vh;
+    color: #b4b4b4;
+    bottom: 33vh;
+
 }
 
 .main-panel-side-buttons-item {
@@ -197,22 +251,17 @@
     cursor: pointer;
 }
 
+.main-panel-side-buttons-item-text {
+    cursor: pointer;
+    transition: color 0.4s ease;
+    font-size: 3.5vh;
+    will-change: color, font-size;
+}
+
 .main-panel-side-buttons-item-text.active {
     color: #fff;
+    font-size: 4vh;
 }
-
-.main-panel-side-buttons-item-dot {
-    width: 1.481vh;
-    height: 1.481vh;
-    margin-left: -30%;
-    transition: margin-left 0.3s ease-in-out;
-    will-change: margin-left;
-}
-
-.main-panel-side-buttons-item-dot.active {
-    margin-left: 0%;
-}
-
 
 .main-panel-side-buttons-button {
     cursor: pointer;

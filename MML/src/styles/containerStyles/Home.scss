@@ -45,14 +45,35 @@
 }
 
 .home-modpacks-thumbnail, .home-modpacks-placeholder {
-    width: 33.519vh;
-    height: 33.519vh;
-    //margin: 2.2915vw;
-    border-radius: 2.5vh;
+    width: 33.5vh;
+    height: 33.5vh;
+
+    border-radius: 2.7vh;
 
 }
 
 .home-modpacks-thumbnail {
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
     cursor: pointer;
+}
+
+.home-modpacks-thumbnail.not-installed {
+    filter: grayscale(100%);
+    z-index: 1;
+}
+
+
+.home-modpacks-thumbnail-container {
+    position: relative;
+}
+
+.home-modpacks-thumbnail-overlay {
+    position: absolute;
+    background: #000000c4;
+    width: 33.519vh;
+    height: 33.519vh;
+    border-radius: 2.56vh;
+    cursor: pointer;
+    z-index: 2;
+
 }

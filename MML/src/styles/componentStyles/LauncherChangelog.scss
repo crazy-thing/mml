@@ -1,0 +1,35 @@
+.launcher-changelog {
+    width: 48vh;
+    height: 60vh;
+    padding: 4vh 2vh;
+    background: #1a1a1a;
+    border-radius: 3.42vh;
+    border: .2vh solid #fff;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.launcher-changelog-header {
+    font-family: var(--font-family-secondary);
+    font-size: 4vh;
+}
+
+.launcher-changelog-version {
+    font-family: var(--font-family-secondary);
+    font-size: 2vh;
+    margin-top: 1vh;
+    color: #a6a6a6;
+    font-weight: 100;
+}
+
+.launcher-changelog-body {
+    width: 80%;
+    margin-top: 2vh;
+    font-family: var(--font-family-secondary);
+    font-weight: thin;
+    font-size: 1.8vh;
+    display: flex;
+    flex-direction: column;
+}

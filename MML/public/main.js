@@ -7,6 +7,7 @@ const { getInstalledVersions } = require('./util/installedVersions');
 const { getSettings } = require('./util/settings');
 const { parseProgress, getAppDataPath } = require('./util/helper');
 const { autoUpdater } = require('electron-updater');
+const { sign } = require('crypto');
 
 let win;
 let isDev = true;
@@ -239,9 +240,13 @@ ipcMain.on('cancel-game', (event, arg) => {
     backendProc.stdin.write(`cancel-game ${arg}\n`);
 });
 
+
 // sign-in <userAccountModel>
 ipcMain.on('sign-in', async (event, arg) => {
-    const UserAccount = await signIn();
+    let UserAccount = await signIn();
+    if (UserAccount == null) {
+        UserAccount = await signIn();
+    }
     if (UserAccount) {
      await backendProc.stdin.write(`sign-in ${JSON.stringify(UserAccount)} \n`);
      event.reply('sign-in-reply', UserAccount);
@@ -295,3 +300,8 @@ ipcMain.on('toggle-maximize', () => {
       win.maximize();
     }
   });
+
+// get-version
+ipcMain.on('get-version', (event, arg) => {
+    event.reply('version', app.getVersion());
+});
