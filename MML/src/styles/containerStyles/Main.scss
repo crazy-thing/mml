@@ -1,0 +1,192 @@
+.main {
+    width: 100%;
+    height: 89vh;
+    margin-top: 11vh;
+    background: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.main__modpack {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+}
+
+.main__modpack__background {
+    position: absolute;
+    top: -1%;
+    left: -1%;
+    width: 102%;
+    height: 102%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.main__modpack__background__image {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    filter: blur(0.7vh);
+}
+
+.main__modpack__left {
+    width: 110vh;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+}
+
+.main__modpack__name-wrapper {
+    margin-top: 11vh;
+    display: inline-block;
+    padding: .6vh .8vh .5vh 0vh;
+    width: 100vh;
+    height: 16.5vh;
+    background: #fff;
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        95% 50%,
+        100% 100%,
+        0 100%
+      );
+}
+
+.main__modpack__name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vh;
+    height: 16.5vh;
+    color: #fff;
+    text-align: center;
+    font-size: 7.5vh;
+    font-family: var(--font-family);
+    background: #373737;
+    border: none;
+    outline: none;
+    clip-path: polygon(
+        0 0, 
+        100% 0, 
+        95% 50%, 
+        100% 100%, 
+        0 100%
+      );
+}
+
+.main__modpack__button-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 32vh;
+    height: 15vh;
+    background: #252525;
+    border: .28vh solid #a6a6a6;
+    border-radius: 0 0 1.2vh 1.2vh;
+    font-family: var(--font-family);
+    font-size: 3vh;
+    margin-left: 1.2vh;
+    transition: height 0.3s ease;
+}
+
+.main__modpack__button {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 24.7vh;
+    height: 8.4vh;
+    border-radius: 1vh;
+    font-size: 3.2vh;
+    top: 3vh;
+    cursor: pointer;
+    transition: transform .3s ease;   
+}
+
+.main__modpack__button:hover {
+    transform: scale(1.04);
+}
+
+.main__modpack__button-text-install {
+    position: absolute;
+    bottom: .7vh;
+    color: #fff;
+    font-size: 2vh;
+    font-family: var(--font-family);
+    text-align: center;
+}
+
+.main__modpack__button-dots-wrapper {
+    position: absolute;
+    bottom: -2.4vh;
+    width: 9vh;
+    height: 2.2vh;
+    background: #686868;
+    border-radius: 0vh 0 .9vh .9vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.main__modpack__button-dots {
+    transform: rotate(90deg);
+    width: 4vh;
+    height: 4vh;
+}
+
+.main__modpack__button-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 6vh;
+    gap: 3.33vh;
+    position: absolute;
+    bottom: 1.5vh;
+    opacity: 0;
+    transition: opacity .3s ease;
+}
+
+.main__modpack__button-options.show {
+    opacity: 1;
+}
+
+.main__modpack__button-options-icon {
+    width: 5.5vh;
+    height: 5.5vh;
+    border-radius: .9vh;
+    background: #686868;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform .3s ease;
+}
+
+.main__modpack__button-options-icon.folder:hover {
+    transform: scale(1.1);
+}
+
+.main__modpack__button-options-icon.trash:hover {
+    transform: scale(1.1);
+}
+
+.main__modpack__button-options-img {
+    width: 3.8vh;
+    height: 3.8vh;
+}
+
+

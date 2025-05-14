@@ -1,6 +1,14 @@
 @import './styles/Layout.scss';
 @import './styles/Typography.scss';
 
+@font-face {
+    font-family: 'Berthold';
+    src: url('./assets/blockberthold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 #root {
     --primary-color: #1b1b1be1; // old was linear-gradient(324deg, rgba(23,22,22,1) 0%, rgba(74,72,72,1) 100%);
     --primary-background: #1b1b1b;
@@ -8,6 +16,7 @@
     --secondary-color-trans: #00000080;
     --secondary-color: #414141;
     --accent-color: #d9d4d4;
-    --font-family: 'Anton', sans-serif;
+    --font-family: 'Berthold', sans-serif;
     --font-family-secondary: 'Roboto', sans-serif;
+
 }

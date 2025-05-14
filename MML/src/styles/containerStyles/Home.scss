@@ -1,79 +1,106 @@
-.home {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.home-overlay {
+    position: absolute;
     width: 100%;
-    height: 96.296vh;
-    background: #373737;
+    height: 100vh;
+    z-index: 0;
+    transition: background 0.3s ease-in-out;
+}
 
+.home-overlay.active {
+    background: rgba(0, 0, 0, 0.8);
     z-index: 1;
 }
 
-.home-settings {
+.home {
     position: absolute;
-    top: 9.426vh;
-    left: 3.037vh;
-
-    width: 5.157vh;
-    height: 5.157vh;
-
-    cursor: pointer;
-}
-
-.home-title {
-    font-size: 7vh;
-    font-family: var(--font-family);
-    margin: 0;
-    margin-top: 4.5vh;
-    margin-bottom: 6vh;
-}
-
-.home-modpacks {
-    width: 94%;
-    padding: 0 3%;
-    height: fit-content;
-    display: flex;
-    flex-direction: column;
-    gap: 4.1vh;
-}
-
-.home-modpacks-row {
     width: 100%;
+    height: 11vh;
+    max-height: 33vh;
+    transition: max-height 0.3s ease-in-out, height 0.3s ease-in-out;
+    background: #373737;
+    border: #686868 solid 0.55vh;
+    border-left: 0;
+    border-right: 0;
+    overflow-y: auto;
+    z-index: 2;
+}
+
+.home__top {
+    width: 100%;
+    margin: 0 auto;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-}
-
-.home-modpacks-thumbnail, .home-modpacks-placeholder {
-    width: 33.5vh;
-    height: 33.5vh;
-
-    border-radius: 2.7vh;
-
-}
-
-.home-modpacks-thumbnail {
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
-    cursor: pointer;
-}
-
-.home-modpacks-thumbnail.not-installed {
-    filter: grayscale(100%);
-    z-index: 1;
-}
-
-
-.home-modpacks-thumbnail-container {
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1vh;
     position: relative;
 }
 
-.home-modpacks-thumbnail-overlay {
+.home__top-settings {
     position: absolute;
-    background: #000000c4;
-    width: 33.519vh;
-    height: 33.519vh;
-    border-radius: 2.56vh;
-    cursor: pointer;
-    z-index: 2;
+    top: 2vh;
+    left: 1.5%;
+    width: 6vh;
+    height: 6vh;
 
+    cursor: pointer;
+}
+
+.home__top-arrows {
+    position: absolute;
+    width: 4vh;
+    height: 4vh;
+    right: 1.5%;
+    top: 3vh;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+
+    &.rotated {
+        transform: rotate(180deg);
+    }
+}
+
+.home__top-content {
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1vh;
+}
+
+.modpack-row {
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1vh;
+}
+
+.modpack-card {
+    width: 32vh;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    &:not(:first-child)::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 15%;
+        height: 70%;
+        width: 0.4vh;
+        background-color: #a6a6a6;
+    }
+    cursor: pointer;
+}
+
+.modpack-card__image {
+    height: 8vh;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
 }

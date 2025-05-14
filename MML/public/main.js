@@ -28,6 +28,7 @@ function createWindow() {
         resizable: true,
         titleBarStyle: 'hidden',
         icon: iconPath,
+        trafficLightPosition: { x: -20, y: -20 },
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,

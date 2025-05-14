@@ -3,12 +3,7 @@ import '../styles/containerStyles/MainPanel.scss';
 import Button from '../components/Button';
 import ConfirmDelete from '../components/ConfirmDelete';
 import Changelog from '../components/Changelog';
-import Screenshots from '../components/Screenshots';
-import { arrows, close, deleteIcon, dot, dots, folderIcon, house, trashIcon } from '../assets/exports';
-import PreloadImages from '../components/PreloadImages';
-import ScreenshotViewer from '../components/ScreenshotViewer';
-import Switch from '../components/Switch';
-import DropDown from '../components/DropDown';
+import { arrows,folderIcon, house, trashIcon } from '../assets/exports';
 import Choose from '../components/Choose';
 
 const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, handleSetNoChange, animationClass, handleAnimationEnd, handleInAnimationEnd, showScroll, style, selectedModpackId, setIsMainRendered }) => {
@@ -383,7 +378,6 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
                onAnimationEnd={itemClass && itemClass.startsWith('item-out') ? () => handleItemAnimationEnd() : () => handleInItemAnimationEnd()}
           >
             <p className='main-panel-rendered-item-title'>SCREENSHOTS</p>
-            <Screenshots screenshots={modpack.screenshots} onClick={openViewer} visible={renderContent} />
           </div>
         );
       case "changelog":
@@ -473,8 +467,6 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
   return (
     <div className={`main-panel ${showScaleUp ? "fadeIn" : "fadeOut"}`} style={style} onTransitionEnd={!showScaleUp ? toggleShowHome : console.log("")} >
 
-    <PreloadImages imageUrls={modpack.screenshots.map(screenshot => screenshot)} />
-    {index != null && <ScreenshotViewer modpack={modpack} index={index} onNext={nextScreenshot} onPrev={prevScreenshot} onClose={closeViewer}  />}
     {showUninstall && <ConfirmDelete onConfirm={handleConfirmed} onCancel={toggleUninstall} />}
     {showVersionSelection && 
       <Choose  handleInstallModpack={handleInstallModpack} setShowVersionSelection={setShowVersionSelection}

@@ -1,15 +1,13 @@
 import { useEffect, useState, useRef } from 'react';
 import './App.scss';
 import LoadingScreen from './components/LoadingScreen';
-import SidePanel from './containers/SidePanel';
 import { getAllModpacks } from './util/api';
-import Settings from './containers/Settings';
 import Confetti from './components/Confetti';
 import TopBar from './components/TopBar';
-import Home from './containers/Home';
 import NewSettings from './containers/NewSettings';
-import MainPanelNew from './containers/MainPanelNew';
 import LauncherChangelog from './components/LauncherChangelog';
+import NewHome from './containers/NewHome';
+import Main from './containers/Main';
 
 function App() {
   const { ipcRenderer } = window.require('electron');
@@ -39,7 +37,7 @@ function App() {
   const [confettiInstances, setConfettiInstances] = useState([]);
   const [confettiNum, setConfettiNum] = useState(200);
 
-  const [isMainRendered, setIsMainRendered] = useState(false);
+  const [isMainRendered, setIsMainRendered] = useState(true);
 
   const [showSettings, setShowSettings] = useState(false);
   const [showHome, setShowHome] = useState(true);
@@ -87,15 +85,11 @@ function App() {
             setSelectedModpack(modpackToSelect);
 
           } else {
-            //setSelectedModpackId(modpacks[0].id);
-            //setSelectedModpack(modpacks[0]);
             setSelectedModpackId(null);
             setSelectedModpack(null);
 
           }
         } else {
-          //setSelectedModpackId(modpacks[0].id);
-          //setSelectedModpack(modpacks[0]);
           setSelectedModpackId(null);
           setSelectedModpack(null);
 
@@ -262,13 +256,9 @@ function App() {
 
       <div className="transition-container">
         <div className={`panel ${showHome ? "slide-in-right" : "slide-out-right"}`}>
-          <Home 
-            modpacks={allModpacks} 
-            toggleShowSettings={toggleShowSettings} 
-            handleSelectModpack={handleSelectModpack} 
-            setTransformOrigin={setTransformOrigin} 
-            allInstalledVersions={allInstalledVersions} 
-          />
+          <NewHome setSelectedModpack={setSelectedModpack} />         
+          <Main selectedModpack={selectedModpack} fetchData={fetchData} />
+
         </div>
         <div className={`panel ${showSettings ? "slide-in-left" : "slide-out-left"}`}>
           <NewSettings 
@@ -280,6 +270,8 @@ function App() {
         </div>
     </div>
 
+
+      {/* 
       {allModpacks.map(mp => (
         <MainPanelNew 
           key={mp.id}
@@ -293,64 +285,19 @@ function App() {
           />
       ))}
 
+      */}
+
       {showChangelog && (
         <div className='app-launcher-changelog' onClick={() => setShowChangelog(false)}>
           <LauncherChangelog  ver={localStorage.getItem("lastVersion")} />
         </div>
         )}
 
-      {/* 
-
-      
-    <div className={`mml ${isLoading ? " " : "visible"}`}>
-
-        {/* 
-      {selectedModpackId && (
-        <div className='app-background-container'>
-          <img className={`app-background-next`} src={`https://minecraftmigos.me/uploads/backgrounds/${nextModpack && nextModpack.background}`} />
-          <img className={`app-background`} style={animationStyle} src={`https://minecraftmigos.me/uploads/backgrounds/${selectedModpack && selectedModpack.background}`} />
-        </div>
-      )}
-      */}
       {showConfetti && (
         confettiInstances.map((instance) => (
           <Confetti key={instance.id} NUM_CONFETTI={confettiNum} setShowConfetti={setShowConfetti} />
         ))
       )}
-      {/* 
-      {allModpacks.map(modpack => (
-        <MainPanel 
-          key={modpack.id} 
-          modpack={modpack} 
-          fetchData={fetchData} 
-          handleSetNoChange={handleSetNoChange} 
-          noChange={noChange}
-          animationClass={animationClass} 
-          handleAnimationEnd={handleAnimationEnd} 
-          handleInAnimationEnd={handleInAnimationEnd} 
-          showScroll={showScroll} 
-          style={{ display: modpack.id === selectedModpackId ? 'flex' : 'none' }}
-          selectedModpackId={selectedModpackId}
-          setIsMainRendered={setIsMainRendered}
-        />
-      ))}
-      */}
-      
-      {/*
-      <SidePanel 
-        pos={sidePanelPos} 
-        changeSettingPos={changeSettingPos} 
-        handleSelectModpack={handleSelectModpack} 
-        modpacks={allModpacks}
-        setIsLoading={setIsLoading} 
-      />
-      <Settings 
-        pos={settingPos} 
-        changeSettingPos={changeSettingPos} 
-      />
-    </div>
-          */}
-
   
     </>
 

@@ -18,6 +18,7 @@ const NewSettings = ({ toggleShowHome, profile, handleSignOut, handleSignIn }) =
     };
 
     const getPlayerSkin = async () => {
+        try {
         const url = 'https://api.minecraftservices.com/minecraft/profile/';
         const response = await fetch(url, {
             method: 'GET',
@@ -45,6 +46,11 @@ const NewSettings = ({ toggleShowHome, profile, handleSignOut, handleSignIn }) =
         } else {
             console.log("Error getting skin");
         }
+        }
+        catch (error) {
+            console.log("Error getting skin", error);
+        }
+
     };
 
     const handleSetProfileVariant = (variant) => {
@@ -67,7 +73,12 @@ const NewSettings = ({ toggleShowHome, profile, handleSignOut, handleSignIn }) =
             console.log(result);
         });
 
-        getPlayerSkin();
+        try {
+        //getPlayerSkin();    
+        } catch (error) {
+            console.log("Error getting skin", error);
+        }
+        
 
         return () => {
             ipcRenderer.removeAllListeners('settings');
