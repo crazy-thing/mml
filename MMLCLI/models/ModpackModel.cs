@@ -12,7 +12,8 @@ namespace MMLCLI.Models
         public  string liteZip { get; set; }
         public  string serverZip { get; set; }   
         public  string size { get; set; }
-        public  string mcVersion { get; set; }
+        public string clean { get; set; }
+        public string mcVersion { get; set; }
         public  string modLoader { get; set; }
         public string build { get; set; } 
         public  string modName { get; set; }
@@ -29,6 +30,7 @@ namespace MMLCLI.Models
         public ObservableCollection<VersionModel> versions {get; set; } 
         public VersionModel mainVersion { get; set; }
         public  string thumbnail { get; set; }
+        public string jvm { get; set; }
         public string InstancePath
         {
             get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MML", "Minecraft", "Instances", id); }

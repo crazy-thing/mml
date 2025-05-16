@@ -3,7 +3,7 @@ import { arrows, dropdown, settingIcon } from '../assets/exports';
 import '../styles/containerStyles/Home.scss';
 import { getAllModpacks } from '../util/api';
 
-const NewHome = ({ setSelectedModpack }) => {
+const NewHome = ({ selectModpack, toggleShowSettings }) => {
     const [modpacks, setModpacks] = useState([]);
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -35,13 +35,15 @@ const NewHome = ({ setSelectedModpack }) => {
             rows.push(
                 <div className='modpack-row' key={i}>
                     {rowItems.map((modpack, index) => (
-                        <div className='modpack-card' key={index} onClick={() => setSelectedModpack(modpack)}>
+                        <div className='modpack-card' key={index} onClick={() => selectModpack(modpack)}>
                             <img
                                 src={`https://minecraftmigos.me/uploads/thumbnails/${modpack.thumbnail}`}
                                 alt={modpack.name}
                                 className='modpack-card__image'
                             />
+                            {modpack.status === "dev" && (<span className='modpack-card__status'>DEV</span>)}
                         </div>
+
                     ))}
                 </div>
             );
@@ -63,6 +65,7 @@ const NewHome = ({ setSelectedModpack }) => {
                     alt="Settings"
                     className='home__top-settings'
                     draggable={false}
+                    onClick={(e) => toggleShowSettings(e)}
                 />
                 <div className='home__top-content'>
                     {renderModpacks()}
@@ -72,7 +75,7 @@ const NewHome = ({ setSelectedModpack }) => {
                     alt="Toggle"
                     className={`home__top-arrows ${isExpanded ? 'rotated' : ''}`}
                     draggable={false}
-                    onClick={() => setIsExpanded(prev => !prev)}
+                    onClick={rowCount > 1 ? () => setIsExpanded(prev => !prev) : console.log("Not enough modpacks to expand")}
                 />
             </div>
         </div>

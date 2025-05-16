@@ -533,12 +533,14 @@
       "type": "package",
       "path": "cmllib.core/3.3.10",
       "files": [
+        ".DS_Store",
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
         "cmllib.core.3.3.10.nupkg.sha512",
         "cmllib.core.nuspec",
         "icon.png",
+        "lib/netstandard2.0/.DS_Store",
         "lib/netstandard2.0/CmlLib.dll"
       ]
     },
@@ -561,12 +563,14 @@
       "type": "package",
       "path": "cmllib.core.installer.forge/0.0.3",
       "files": [
+        ".DS_Store",
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
         "cmllib.core.installer.forge.0.0.3.nupkg.sha512",
         "cmllib.core.installer.forge.nuspec",
         "icon.png",
+        "lib/netstandard2.0/.DS_Store",
         "lib/netstandard2.0/CmlLib.Core.Installer.Forge.dll"
       ]
     },
@@ -798,6 +802,7 @@
       "path": "runtime.native.system/4.0.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/netstandard1.0/_._",
@@ -1756,6 +1761,7 @@
       "path": "system.runtime.interopservices.runtimeinformation/4.0.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",

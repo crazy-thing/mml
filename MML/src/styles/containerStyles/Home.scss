@@ -8,7 +8,7 @@
 
 .home-overlay.active {
     background: rgba(0, 0, 0, 0.8);
-    z-index: 1;
+    z-index: 3;
 }
 
 .home {
@@ -22,7 +22,7 @@
     border-left: 0;
     border-right: 0;
     overflow-y: auto;
-    z-index: 2;
+    z-index: 4;
 }
 
 .home__top {
@@ -44,6 +44,7 @@
     height: 6vh;
 
     cursor: pointer;
+    z-index: 10;
 }
 
 .home__top-arrows {
@@ -79,6 +80,7 @@
 }
 
 .modpack-card {
+    position: relative;
     width: 32vh;
     height: 100%;
     display: flex;
@@ -103,4 +105,22 @@
     width: auto;
     max-width: 100%;
     object-fit: contain;
+}
+
+.modpack-card__status {
+    position: absolute;
+    width: 6vh;
+    height: 2.5vh;
+    border: .3vh solid #ffc158;
+    color: #ffc158;
+    font-size: 2vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: .1vh;
+    bottom: 1vh;
+    right: 1vh;
+    font-family: var(--font-family);
+
 }

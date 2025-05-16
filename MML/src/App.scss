@@ -133,3 +133,15 @@
 .slide-out-left {
   transform: translateX(-100%);
 }
+
+.app__no-modpack {
+    width: 100%;
+    height: 89vh;
+    margin-top: 11vh;
+    background: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}

@@ -220,12 +220,11 @@ function App() {
       }        
     });
 
-
-
     return () => {
       ipcRenderer.removeAllListeners('sign-in-reply');
       ipcRenderer.removeAllListeners('default-account-reply');
     };
+
 
   }, []);
 
@@ -235,17 +234,19 @@ function App() {
     willChange: "opacity, animation"
   }
 
-  const toggleShowSettings = () => {
+  const toggleShowSettings = (e) => {
+    e.stopPropagation();
     setShowSettings(true);
-    setShowHome(false);
   };
 
   const toggleShowHome = () => {
     setShowSettings(false);
-    setShowHome(true);
-    setSelectedModpackId(null);
-    setSelectedModpack(null);
-    localStorage.setItem('lastSelectedModpack', JSON.stringify(""));
+  };
+
+  const selectModpack = (modpack) => {
+    setSelectedModpack(modpack);
+    setSelectedModpackId(modpack.id);
+    console.log("Selected Modpack: ", modpack, selectedModpackId);
   };
 
   return (
@@ -256,8 +257,41 @@ function App() {
 
       <div className="transition-container">
         <div className={`panel ${showHome ? "slide-in-right" : "slide-out-right"}`}>
-          <NewHome setSelectedModpack={setSelectedModpack} />         
-          <Main selectedModpack={selectedModpack} fetchData={fetchData} />
+          <NewHome selectModpack={selectModpack} toggleShowSettings={toggleShowSettings} /> 
+          {selectedModpackId == null ? (
+            <div className='app__no-modpack'>
+              <svg width="50vh" height="9.4vh" viewBox="0 0 132 21" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <clipPath id="clip-shape">
+                    <path d="M125.10196425045291,0L6.25339,0C6.25339,3.44086 3.47078,6.25339 0,6.25339L0,13.998192970225134C3.44086,13.998192970225134 6.25339,16.780792970225136 6.25339,20.251592970225133L125.10196425045291,20.251592970225133C125.10196425045291,16.810692970225134 127.88456425045291,13.998192970225134 131.3553642504529,13.998192970225134L131.3553642504529,6.25339C127.91446425045291,6.25339 125.10196425045291,3.47078 125.10196425045291,0Z" />
+                  </clipPath>
+                </defs>
+
+                <path
+                  d="M125.10196425045291,0L6.25339,0C6.25339,3.44086 3.47078,6.25339 0,6.25339L0,13.998192970225134C3.44086,13.998192970225134 6.25339,16.780792970225136 6.25339,20.251592970225133L125.10196425045291,20.251592970225133C125.10196425045291,16.810692970225134 127.88456425045291,13.998192970225134 131.3553642504529,13.998192970225134L131.3553642504529,6.25339C127.91446425045291,6.25339 125.10196425045291,3.47078 125.10196425045291,0Z"
+                  stroke="#868686"
+                  strokeWidth="2"
+                  fill="#1a1a1a"
+                  clipPath="url(#clip-shape)"
+                />
+
+                <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle"
+                  fill="#ffffff" fontSize={"1.5vh"} fontFamily="var(--font-family)">
+                  SELECT A MODPACK
+                </text>
+              </svg>
+            </div>
+          ) : (
+            allModpacks.map(mp => (
+              <Main
+                key={mp.id}
+                mp={mp}
+                fetchData={fetchData}
+                selectedModpackId={selectedModpackId}
+                style={{ display: mp.id === selectedModpackId ? 'flex' : 'none' }}
+              />
+            ))
+          )}
 
         </div>
         <div className={`panel ${showSettings ? "slide-in-left" : "slide-out-left"}`}>

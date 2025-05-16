@@ -1,11 +1,13 @@
 .changelog {
-    width: 80%;
+    width: 95%;
 
     height: 100%;
     display: flex;
     flex-direction: column;
-    z-index: 100000;
-    //margin-top: 2.1vh;
+
+    overflow-y: auto;
+
+    margin-top: 5vh;
 }
 
 .changelog-sort-by {
@@ -26,7 +28,7 @@
 
 .changelog-sort-by-header {
     font-family: var(--font-family-secondary);
-    font-size: 2vh;
+    font-size: 2.3vh;
     letter-spacing: 0.5px;
     margin-right: 1vh;
     font-weight: bold;

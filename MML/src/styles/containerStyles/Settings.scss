@@ -5,22 +5,37 @@
     min-width: 100vw;
     width: 100%;
     height: 96.296vh;
-    background: #373737;
+    background: #1a1a1a;
 
     font-family: var(--font-family-secondary);
 
     z-index: 2;
 }
 
+.settings__top {
+    position: absolute;
+    width: 100%;
+    height: 11vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #373737;
+    border: #686868 solid 0.55vh;
+    border-left: 0;
+    border-right: 0;
+    z-index: 4;
+}
+
 
 .settings-home {
     position: absolute;
-    top: 9.426vh;
+    top: 3vh;
     left: 3.037vh;
 
-    width: 5.157vh;
-    height: 5.157vh;
+    width: 4.8vh;
+    height: 4.8vh;
 
+    z-index: 4;
     cursor: pointer;
 }
 
@@ -37,6 +52,7 @@
     flex-direction: row;
     justify-content: flex-start;
     width: 100%;
+    margin-top: 8vh;
 }
 
 .settings-body-left {
@@ -48,8 +64,10 @@
     justify-content: flex-start;
 
     width: 59vh;
+    height: 65vh;
     border-radius: 3.1vh;
     margin-left: 13vh;
+    border: .27vh solid #a6a6a6;
 
     background: #222222;
 }
@@ -61,6 +79,7 @@
     align-items: center;
 
     width: 33vh;
+    height: 100%;
 }
 
 .settings-body-left-variants {
@@ -75,12 +94,14 @@
     margin-left: 12.1vh;
     background: #222222;
     width: 79vh;
-    height: 62vh;
+    height: 30vh;
     border-radius: 3.1vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1vh;
+    border: .27vh solid #a6a6a6;
+
 }
 
 .settings-profile-picture {
@@ -111,9 +132,14 @@
     height: 6vh;
     border-radius: .9vh;
     font-family: var(--font-family);
-    font-size: 3.3vh;
+    font-size: 2.8vh;
+    transition: transform 0.2s ease-in-out;
 
     cursor: pointer;
+}
+
+.settings-body-button:hover {
+    transform: scale(1.05);
 }
 
 .settings-body-button.signIn {
@@ -197,7 +223,7 @@
 
 .settings-version {
     position: absolute;
-    bottom: 4vh;
+    bottom: 5 vh;
     right: 1vh;
     font-size: 2vh;
     color: #d9d9d9;

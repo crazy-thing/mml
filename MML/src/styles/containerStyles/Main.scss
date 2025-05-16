@@ -113,6 +113,17 @@
     top: 3vh;
     cursor: pointer;
     transition: transform .3s ease;   
+    z-index: 2;
+}
+
+.main__modpack__button.running:hover {
+    background: #983939!important;
+    transition: transform .3s ease, background .3s ease;   
+}
+
+.main__modpack__button.stop {
+    background: #983939!important;
+
 }
 
 .main__modpack__button:hover {
@@ -121,7 +132,7 @@
 
 .main__modpack__button-text-install {
     position: absolute;
-    bottom: .7vh;
+    bottom: .3vh;
     color: #fff;
     font-size: 2vh;
     font-family: var(--font-family);
@@ -158,6 +169,7 @@
     bottom: 1.5vh;
     opacity: 0;
     transition: opacity .3s ease;
+    z-index: 1;
 }
 
 .main__modpack__button-options.show {
@@ -189,4 +201,145 @@
     height: 3.8vh;
 }
 
+.main__modpack__right {
+    width: 77vh;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+}
 
+
+.main__uninstall {
+    width: 60vh;
+    padding: 2vh;
+    height: 26vh;
+    border-radius: 1.4vh;
+    border: 0.27vh solid #a6a6a6;
+    background: #252525;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.main__uninstall__text {
+    width: 100%;
+    color: #fff;
+    font-size: 3.6vh;
+    letter-spacing: .3vh;
+    font-family: var(--font-family);
+    text-align: center;
+    margin-top: 2.8vh;
+}
+
+.main__uninstall__buttons {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6vh;
+    margin-top: 4.5vh;
+}
+
+.main__uninstall__buttons-button {
+    width: 24vh;
+    height: 8.4vh;
+    border-radius: .9vh;
+    border: none;
+    font-size: 3vh;
+    font-family: var(--font-family);
+    color: #fff;
+    cursor: pointer;
+    transition: transform .3s ease;
+}
+
+.main__uninstall__buttons-button:hover {
+    transform: scale(1.04);
+}
+.main__uninstall__buttons-button.yes {
+    background: #49a749;
+}
+
+.main__uninstall__buttons-button.no {
+    background: #d9534f;
+}
+
+.main__uninstall__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: -1;
+}
+
+
+
+.main__stop {
+    width: 60vh;
+    padding: 2vh;
+    height: 26vh;
+    border-radius: 1.4vh;
+    border: 0.27vh solid #a6a6a6;
+    background: #252525;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.main__stop__text {
+    width: 100%;
+    color: #fff;
+    font-size: 3.6vh;
+    letter-spacing: .3vh;
+    font-family: var(--font-family);
+    text-align: center;
+    margin-top: 2.8vh;
+}
+
+.main__stop__buttons {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6vh;
+    margin-top: 4.5vh;
+}
+
+.main__stop__buttons-button {
+    width: 24vh;
+    height: 8.4vh;
+    border-radius: .9vh;
+    border: none;
+    font-size: 3vh;
+    font-family: var(--font-family);
+    color: #fff;
+    cursor: pointer;
+    transition: transform .3s ease;
+}
+
+.main__stop__buttons-button:hover {
+    transform: scale(1.04);
+}
+.main__stop__buttons-button.yes {
+    background: #49a749;
+}
+
+.main__stop__buttons-button.no {
+    background: #d9534f;
+}
+
+.main__stop__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: -1;
+}

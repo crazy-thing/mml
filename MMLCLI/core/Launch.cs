@@ -35,13 +35,18 @@ namespace MMLCLI.Core
                 var session = AccountManager.GetAccount();
 
                 var settings = SettingsManager.settings;
+                var jvmArgs = "";
+                if (selectedModpack.jvm != null)
+                {
+                    jvmArgs = selectedModpack.jvm;
+                }
 
                 Console.WriteLine(session);
                 if (session != null )
                 {
                     session.UserType = "msa";
                     Console.WriteLine($"Launching with {fullName}");
-                    var process = await launcher.CreateProcessAsync(fullName, new MLaunchOption 
+                    var process = await launcher.CreateProcessAsync(fullName, new MLaunchOption
                     {
                         MinimumRamMb = int.Parse(settings.MinMem),
                         MaximumRamMb = int.Parse(settings.MaxMem),

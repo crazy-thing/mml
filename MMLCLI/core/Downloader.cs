@@ -59,6 +59,13 @@ namespace MMLCLI.Core {
                         }
                         string instancePath = Path.Combine(modpacksDir, modpack.id);
 
+                        if (modpack.mainVersion.clean == "true")
+                        {
+                            if (Directory.Exists(instancePath))
+                            {
+                                Directory.Delete(instancePath, true);
+                            }
+                        }
                         Directory.CreateDirectory(instancePath); 
 
                         string filePath = Path.Combine(instancePath, fileName);
