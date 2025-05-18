@@ -11,24 +11,25 @@ const { sign } = require('crypto');
 
 let win;
 let isDev = true;
+let isDevBuild = true;
+let showingApi = false;
+
 
 const iconPath = path.join(__dirname, 'mml.ico');
-function createWindow() {
+function createWindow(showTitleBar = false) {
 
-    const initialWidth = 1600; //1600
-    const initialHeight = 900; //900
+    const initialWidth = 1600; 
+    const initialHeight = 900; 
     const ratio = initialWidth / initialHeight;
 
-    win = new BrowserWindow({
+    const options = {
         width: initialWidth,
         height: initialHeight,
         minWidth: 900,
         minHeight: 508,
         autoHideMenuBar: true,
         resizable: true,
-        titleBarStyle: 'hidden',
         icon: iconPath,
-        trafficLightPosition: { x: -20, y: -20 },
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -36,10 +37,16 @@ function createWindow() {
             enablePreferredSizeMode: true,
             zoomFactor: 1.0
         },
-    });
+    }
 
+    if (!showTitleBar) {
+        options.titleBarStyle = 'hidden';
+        options.trafficLightPosition = { x: -20, y: -20 };
+    }
 
-    win.setAspectRatio(1.77); //1.77
+    win = new BrowserWindow(options);       
+    win.setAspectRatio(1.77);
+
 
     win.webContents.on('before-input-event', (event, input) => {
         const disabledShortcuts = [
@@ -154,8 +161,20 @@ function createWindow() {
     backendProc.on('error', (err) => {
         console.error('Failed to start C# backend', err);
     });
-
-   isDev ? win.loadURL("http://localhost:5173/") : win.loadURL(`file://${path.join(__dirname, 'index.html')}`);
+    
+    if (isDevBuild) {
+        if (showingApi) {
+            win.loadURL('https://minecraftmigos.me');
+        } else {
+            if (isDev) {
+                win.loadURL("http://localhost:5173/");
+            } else {
+                win.loadURL(`file://${path.join(__dirname, 'index.html')}`);
+            }
+        }
+    } else {
+        isDev ? win.loadURL("http://localhost:5173/") : win.loadURL(`file://${path.join(__dirname, 'index.html')}`);
+    }
 
    win.webContents.on('did-finish-load', () => {
     win.webContents.insertCSS(`
@@ -169,8 +188,18 @@ function createWindow() {
 };
 
 app.on('ready', function() {
-    createWindow();
+    createWindow(false);
     autoUpdater.checkForUpdates();
+
+    if (isDevBuild) {
+        globalShortcut.register('Control+D', () => {
+            showingApi = !showingApi;
+
+            if (win) win.close();
+
+            createWindow(showingApi); 
+        });   
+    }
 });
   
   autoUpdater.on('update-downloaded', () => {

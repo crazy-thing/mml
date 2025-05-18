@@ -75,7 +75,7 @@ const NewHome = ({ selectModpack, toggleShowSettings }) => {
                     alt="Toggle"
                     className={`home__top-arrows ${isExpanded ? 'rotated' : ''}`}
                     draggable={false}
-                    onClick={rowCount > 1 ? () => setIsExpanded(prev => !prev) : console.log("Not enough modpacks to expand")}
+                    onClick={modpacks && modpacks.length > 5 ? () => setIsExpanded(prev => !prev) : console.log("Not enough modpacks to expand")}
                 />
             </div>
         </div>
