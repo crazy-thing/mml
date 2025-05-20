@@ -3,15 +3,23 @@ import { arrows, dropdown, settingIcon } from '../assets/exports';
 import '../styles/containerStyles/Home.scss';
 import { getAllModpacks } from '../util/api';
 
+
 const NewHome = ({ selectModpack, toggleShowSettings }) => {
     const [modpacks, setModpacks] = useState([]);
     const [isExpanded, setIsExpanded] = useState(false);
+    const DEV = true;
 
     useEffect(() => {
         const fetchModpacks = async () => {
             try {
                 const mps = await getAllModpacks();
-                setModpacks(mps);
+                if (DEV) {
+                    setModpacks(mps);
+                } else {
+                    const filteredMps = mps.filter(mp => mp.status === "released")
+                    setModpacks(filteredMps);
+                }
+
             } catch (error) {
                 console.error('Error fetching modpacks:', error);
             }
@@ -37,7 +45,7 @@ const NewHome = ({ selectModpack, toggleShowSettings }) => {
                     {rowItems.map((modpack, index) => (
                         <div className='modpack-card' key={index} onClick={() => selectModpack(modpack)}>
                             <img
-                                src={`https://minecraftmigos.me/uploads/thumbnails/${modpack.thumbnail}`}
+                                src={`https://t.minecraftmigos.me/uploads/thumbnails/${modpack.thumbnail}`}
                                 alt={modpack.name}
                                 className='modpack-card__image'
                             />

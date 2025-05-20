@@ -104,7 +104,7 @@ const Settings = ({ pos, changeSettingPos, profile }) => {
             <div className='settings-mml'>
                 <div className='settings-mml-info'>
 
-                <img className='settings-mml-icon' draggable={false} src={mml} style={{cursor: "pointer"}} onClick={() => openWebsite("https://minecraftmigos.netlify.app/")}/>
+                <img className='settings-mml-icon' draggable={false} src={mml} style={{cursor: "pointer"}} onClick={() => openWebsite("https://t.minecraftmigos.me.netlify.app/")}/>
                 <div className='settings-mml-info-icons'>
                         <img className='settings-mml-info-website ' draggable={false} src={github} onClick={() => openWebsite("https://github.com/crazy-thing/the-mmm-launcher") } />
                 </div>

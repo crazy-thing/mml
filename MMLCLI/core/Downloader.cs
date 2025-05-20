@@ -9,7 +9,7 @@ namespace MMLCLI.Core {
     public class Downloader
     {
         private static string apiKey = "$2a$10$PRMYXEXiKwjYUhsefOaeneSfam4VrzBImlKXPfd8d74Jc6Z0XdKPi";
-        private static readonly string baseApi = "https://minecraftmigos.me/example/v1/";
+        private static readonly string baseApi = "https://t.minecraftmigos.me/example/v1/";
         private static string baseApiUrl = "https://api.curseforge.com/v1/mods/";
         private static string baseModPackDownloadUrl = "https://www.curseforge.com/api/v1/mods";
         private static readonly string modpacksDir;
@@ -61,6 +61,7 @@ namespace MMLCLI.Core {
 
                         if (modpack.mainVersion.clean == "true")
                         {
+                            Console.WriteLine("Cleaning instance directory...");
                             if (Directory.Exists(instancePath))
                             {
                                 Directory.Delete(instancePath, true);

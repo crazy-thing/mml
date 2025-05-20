@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../styles/componentStyles/Modpacks.scss';
 
 const Modpacks = ({ modpacks, handleSelectModpack }) => {
-    const thumbnailsUrl = 'https://minecraftmigos.me/uploads/thumbnails/';
+    const thumbnailsUrl = 'https://t.minecraftmigos.me/uploads/thumbnails/';
     const [activeIndex, setActiveIndex] = useState(null);
 
     const renderModpacks = () => {

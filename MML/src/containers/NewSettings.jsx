@@ -210,7 +210,7 @@ const NewSettings = ({ toggleShowHome, profile, handleSignOut, handleSignIn }) =
             {/* 
             <div className='settings-about'>
                 <div className='settings-about-top'>
-                    <img className='settings-about-top-logo' draggable={false} src={mml} style={{ cursor: "pointer" }} onClick={() => openWebsite("https://minecraftmigos.netlify.app/")} />
+                    <img className='settings-about-top-logo' draggable={false} src={mml} style={{ cursor: "pointer" }} onClick={() => openWebsite("https://t.minecraftmigos.me.netlify.app/")} />
                     <img className='settings-about-top-git' draggable={false} src={github} onClick={() => openWebsite("https://github.com/crazy-thing/the-mmm-launcher")} />
                 </div>
                 <p className='settings-about-version'> Minecraft Migos Launcher v2.0.6 </p>

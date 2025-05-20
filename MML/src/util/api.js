@@ -1,4 +1,4 @@
-const baseUrl = 'https://minecraftmigos.me/example/v1';
+const baseUrl = 'https://t.minecraftmigos.me/example/v1';
 
 export const getAllModpacks = async () => {
     try {

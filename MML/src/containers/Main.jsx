@@ -30,29 +30,39 @@ const Main = ({mp, fetchData, selectedModpackId, style }) => {
         setUpdate(false);
         setShowOptions(false);
         setInstalledVersion(null);
-        const lastInstalledVersion = JSON.parse(localStorage.getItem(`lastInstalledVersion${mp && mp.id}`));
-
-    
-        if (lastInstalledVersion && mp && mp.mainVersion.id === lastInstalledVersion.id) {
-          setInstalledVersion(lastInstalledVersion);
-        } else {
-          if (lastInstalledVersion != null) {
-            if (mp.mainVersion.id === "null") {
-              setUpdate(false);
-            } else {
-              setUpdate(true);
-            }
-          }
-        }
     
         //setIsMainRendered(true);
         if (mp && mp.id === selectedModpackId) {
             setShowMain(true);
+            checkForUpdate();
         } else {
             setShowMain(false);
         }
         console.log("Selected Modpack: ", mp);
       }, [mp]);
+
+    const checkForUpdate = () => {
+        if (mp && mp.mainVersion && mp.mainVersion.id === "null") {
+            setUpdate(false);
+            console.log("coming soon");
+        } else {
+            const lastInstalledVersion = JSON.parse(localStorage.getItem(`lastInstalledVersion${mp && mp.id}`));
+            if (lastInstalledVersion && mp && mp.mainVersion && mp.mainVersion.id === lastInstalledVersion.id) {
+                setInstalledVersion(lastInstalledVersion);
+            } else {
+                if (lastInstalledVersion != null) {
+                    if (mp && mp.mainVersion && mp.mainVersion.id === "null") {
+                        console.log(lastInstalledVersion.id + " " + mp.mainVersion.id);
+                        setUpdate(false);
+                        console.log("coming soon");
+                    } else {
+                        setUpdate(true);
+                        console.log("update available");
+                    }
+                }
+            }
+        }
+    }
 
     const comingSoonStyle = {
         background: "#818181"
@@ -186,7 +196,7 @@ const Main = ({mp, fetchData, selectedModpackId, style }) => {
                     <div className='main__modpack__background'>
                         <img
                             className='main__modpack__background__image'
-                            src={`https://minecraftmigos.me/uploads/backgrounds/${mp.background}`}
+                            src={`https://t.minecraftmigos.me/uploads/backgrounds/${mp.background}`}
                         />
                     </div>
                 )}
@@ -197,7 +207,7 @@ const Main = ({mp, fetchData, selectedModpackId, style }) => {
                     <div className='main__modpack__button-wrapper' style={{height: showOptions ? "20vh" : "15vh"}}>
                         <div
                             className={`main__modpack__button ${showStopGame ? "stop" : gameRunning ? "running" : ""}`}
-                            style={(mp.mainVersion && mp.mainVersion.zip === "null") || (mp.versions && mp.versions.length === 0) ? comingSoonStyle : update && installedVersion ? updateStyle : gameRunning ? runningStyle : showUninstall ? comingSoonStyle : defaultStyle}
+                            style={(mp.mainVersion && mp.mainVersion.zip === "null") || (mp.versions && mp.versions.length === 0) ? comingSoonStyle : update ? updateStyle : gameRunning ? runningStyle : showUninstall ? comingSoonStyle : defaultStyle}
                             onClick={
                                 gameRunning ?  () => setShowStopGame(true)
                                 : isInstalling ? console.log("please wait for installation to finish")
@@ -206,7 +216,7 @@ const Main = ({mp, fetchData, selectedModpackId, style }) => {
                                 : installedVersion ? () => handleLaunch()
                                 : () => handleInstallModpack(mp)}
                             >
-                            <span className='main__modpack__button-text'>{isInstalling ? `${buttonText}%` : (mp.mainVersion && mp.mainVersion.zip === "null") || (mp.versions && mp.versions.length === 0) ? "COMING SOON" : update && installedVersion ? "UPDATE" : gameRunning ? "RUNNING" : showUninstall ? "WAITING..." : installedVersion ? "PLAY" : "INSTALL"}</span >
+                            <span className='main__modpack__button-text'>{isInstalling ? `${buttonText}%` : (mp.mainVersion && mp.mainVersion.zip === "null") || (mp.versions && mp.versions.length === 0) ? "COMING SOON" : update ? "UPDATE" : gameRunning ? "RUNNING" : showUninstall ? "WAITING..." : installedVersion ? "PLAY" : "INSTALL"}</span >
                             {isInstalling && (<span className='main__modpack__button-text-install'>{installText}</span> )}
                         </div>
                         <div className={`main__modpack__button-options ${showOptions ? "show" : ""}`}>

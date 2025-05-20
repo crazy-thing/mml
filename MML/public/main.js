@@ -44,8 +44,12 @@ function createWindow(showTitleBar = false) {
         options.trafficLightPosition = { x: -20, y: -20 };
     }
 
-    win = new BrowserWindow(options);       
-    win.setAspectRatio(1.77);
+    win = new BrowserWindow(options);   
+    if (!showTitleBar) {
+        win.setAspectRatio(1.77);
+    } else {
+        win.setAspectRatio(0);
+    }
 
 
     win.webContents.on('before-input-event', (event, input) => {
@@ -164,7 +168,7 @@ function createWindow(showTitleBar = false) {
     
     if (isDevBuild) {
         if (showingApi) {
-            win.loadURL('https://minecraftmigos.me');
+            win.loadURL('https://t.minecraftmigos.me');
         } else {
             if (isDev) {
                 win.loadURL("http://localhost:5173/");

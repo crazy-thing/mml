@@ -490,7 +490,7 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
           <p className='main-panel-side-header-account'>{profile && profile.GamerTag}</p>
         </div>
         <div className='main-panel-side-banner' style={{background: modpack && modpack.banner}}>
-          <img src={`https://minecraftmigos.me/uploads/thumbnails/${modpack && modpack.thumbnail}`} draggable={false} className='main-panel-side-banner-thumbnail' />
+          <img src={`https://t.minecraftmigos.me/uploads/thumbnails/${modpack && modpack.thumbnail}`} draggable={false} className='main-panel-side-banner-thumbnail' />
           <p className='main-panel-side-banner-name'>{modpack && modpack.name}</p>
         </div>
 
@@ -560,7 +560,7 @@ const MainPanelNew = ({ modpack, profile, fetchData, noChange, toggleShowHome, h
       </div>
 
       <div className='main-panel-right' >
-        <img className='main-panel-right-background' src={`https://minecraftmigos.me/uploads/backgrounds/${modpack && modpack.background}`} draggable={false} />
+        <img className='main-panel-right-background' src={`https://t.minecraftmigos.me/uploads/backgrounds/${modpack && modpack.background}`} draggable={false} />
 
         {modpack && modpack.mainVersion && modpack.mainVersion.id !== "null" && (
           selectedItem === "changelogs" ? (
