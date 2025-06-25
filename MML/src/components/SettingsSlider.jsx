@@ -5,7 +5,7 @@ const SettingsSlider = ({ handleChangeSetting, ramValue }) => {
     const [ramValueGB, setRamValueGB] = useState(8); // 8 GB default
 
     useEffect(() => {
-        setRamValueGB(ramValue / 1024); // Convert MB to GB
+        setRamValueGB(Math.round(ramValue / 1024)); // round ram to whole number
     }, [ramValue]);
 
     useEffect(() => {
@@ -23,14 +23,14 @@ const SettingsSlider = ({ handleChangeSetting, ramValue }) => {
         } else {
             if (value > 32) value = 32;
             if (value < 0.25) value = 0.25;
-            setRamValueGB(value);
+            setRamValueGB(Math.round(value));
             handleChangeSetting("MaxMem", Math.round(value * 1024));
         }
     };
 
     const handleSliderChange = (e) => {
         const valueGB = parseFloat(e.target.value);
-        setRamValueGB(valueGB);
+        setRamValueGB(Math.round(valueGB));
         handleChangeSetting("MaxMem", Math.round(valueGB * 1024));
     };
 

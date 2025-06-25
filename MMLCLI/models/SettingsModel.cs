@@ -1,5 +1,3 @@
-using NickStrupat;
-
 namespace MMLCLI.Models {
     public class SettingsModel
     {
@@ -8,24 +6,7 @@ namespace MMLCLI.Models {
         public bool RunOnStart { get; set; } = false;
         public bool DoNotRunStart { get; set; } = true;
         public string MinMem { get; set; } = "512";
-        private string _maxMem;
-        public string MaxMem
-        {
-            get 
-            {
-                if (string.IsNullOrEmpty(_maxMem))
-                {
-                    var totalMemoryBytes = new ComputerInfo().TotalPhysicalMemory;
-                    double halfTotalMemoryMB = Math.Floor((totalMemoryBytes / 2) / (1024.0 * 1024.0));
-                    _maxMem = halfTotalMemoryMB.ToString();
-                }
-                return _maxMem;
-            }
-            set 
-            {
-                _maxMem = value;
-            }
-        }
+        public string MaxMem { get; set; } = "6096";
 
     }
 }

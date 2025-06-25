@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using MMLCLI.Helpers;
 using MMLCLI.Models;
 
 namespace MMLCLI.Util
@@ -15,11 +16,11 @@ namespace MMLCLI.Util
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                settingsJsonPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", "MML", "settings.json");
+                settingsJsonPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", IsDev.isDev ? "MMLDEV" : "MML", "settings.json");
             }
             else
             {
-                settingsJsonPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MML", "settings.json");
+                settingsJsonPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), IsDev.isDev ? "MMLDEV" : "MML", "settings.json");
             }
         }
 

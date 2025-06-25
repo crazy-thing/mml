@@ -9,7 +9,7 @@ namespace MMLCLI.Core {
     public class Downloader
     {
         private static string apiKey = "$2a$10$PRMYXEXiKwjYUhsefOaeneSfam4VrzBImlKXPfd8d74Jc6Z0XdKPi";
-        private static readonly string baseApi = "https://t.minecraftmigos.me/example/v1/";
+        private static readonly string baseApi = "https://minecraftmigos.tech/example/v1/";
         private static string baseApiUrl = "https://api.curseforge.com/v1/mods/";
         private static string baseModPackDownloadUrl = "https://www.curseforge.com/api/v1/mods";
         private static readonly string modpacksDir;
@@ -18,11 +18,11 @@ namespace MMLCLI.Core {
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                modpacksDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", "MML", "Minecraft", "Instances");
+                modpacksDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", IsDev.isDev ? "MMLDEV" : "MML", "Minecraft", "Instances");
             }
             else
             {
-                modpacksDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MML", "Minecraft", "Instances");
+                modpacksDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), IsDev.isDev ? "MMLDEV" : "MML", "Minecraft", "Instances");
             }
         }
         

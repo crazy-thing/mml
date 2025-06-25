@@ -230,6 +230,25 @@
     cursor: pointer;
 }
 
+.settings-api {
+    position: absolute;
+    bottom: 10vh;
+    right: 1vh;
+    font-size: 3vh;
+    font-family: var(--font-family);
+    width: 27.8vh;
+    height: 5.8vh;
+    border-radius: 1vh;
+    border: .278vh solid #a6a6a6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #252525;
+    color: #ffc158;
+    cursor: pointer;
+
+}
+
 .circle-toggle {
     display: flex;
     gap: 2.5vh;

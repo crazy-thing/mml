@@ -5,6 +5,7 @@ import { settings } from '../assets/exports';
 
 const Home = ({ modpacks, toggleShowSettings, handleSelectModpack, allInstalledVersions }) => {
     const { ipcRenderer } = window.require('electron');
+    const ISDEV = false;
 
     const [mps, setMps] = useState(modpacks);
     const [installedMps, setInstalledMps] = useState([]);
@@ -31,7 +32,7 @@ const Home = ({ modpacks, toggleShowSettings, handleSelectModpack, allInstalledV
                 <img
                   className={`home-modpacks-thumbnail ${!installedMps.some(installed => installed.id === mps[i].id) ? "not-installed" : ""}`}
                   draggable={false}
-                  src={`https://t.minecraftmigos.me/uploads/thumbnails/${mps[i].thumbnail}`}
+                  src={`https://minecraftmigos.tech/uploads/thumbnails/${mps[i].thumbnail}`}
                 />
                 </div>
               )}
@@ -41,7 +42,7 @@ const Home = ({ modpacks, toggleShowSettings, handleSelectModpack, allInstalledV
                 <img
                   className={`home-modpacks-thumbnail ${!installedMps.some(installed => installed.id === mps[i + 1].id) ? "not-installed" : ""}`}
                   draggable={false}
-                  src={`https://t.minecraftmigos.me/uploads/thumbnails/${mps[i + 1].thumbnail}`}
+                  src={`https://minecraftmigos.tech/uploads/thumbnails/${mps[i + 1].thumbnail}`}
                 />
                 </div>
               )}
@@ -51,7 +52,7 @@ const Home = ({ modpacks, toggleShowSettings, handleSelectModpack, allInstalledV
                 <img
                   className={`home-modpacks-thumbnail ${!installedMps.some(installed => installed.id === mps[i + 2].id) ? "not-installed" : ""}`}
                   draggable={false}
-                  src={`https://t.minecraftmigos.me/uploads/thumbnails/${mps[i + 2].thumbnail}`}
+                  src={`https://minecraftmigos.tech/uploads/thumbnails/${mps[i + 2].thumbnail}`}
                 />
                 </div>
               )}
@@ -61,7 +62,7 @@ const Home = ({ modpacks, toggleShowSettings, handleSelectModpack, allInstalledV
                 <img
                   className={`home-modpacks-thumbnail ${!installedMps.some(installed => installed.id === mps[i + 3].id) ? "not-installed" : ""}`}
                   draggable={false}
-                  src={`https://t.minecraftmigos.me/uploads/thumbnails/${mps[i + 3].thumbnail}`}
+                  src={`https://minecraftmigos.tech/uploads/thumbnails/${mps[i + 3].thumbnail}`}
                 />
                 </div>
               )}

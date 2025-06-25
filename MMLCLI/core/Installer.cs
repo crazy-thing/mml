@@ -8,13 +8,14 @@ using CmlLib.Core.Installer.FabricMC;
 using MMLCLI.Models;
 using CmlLib.Core.Version;
 using System.Runtime.InteropServices;
+using MMLCLI.Helpers;
 
 namespace MMLCLI.Core
 {
     public class Installer
     {
-        private static string minecraftRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MML", "Minecraft");
-        private static string minecraftRootMac = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", "MML", "Minecraft");
+        private static string minecraftRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), IsDev.isDev ? "MMLDEV" : "MML", "Minecraft");
+        private static string minecraftRootMac = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", IsDev.isDev ? "MMLDEV" : "MML", "Minecraft");
 
         private static string runtimePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".minecraft", "runtime");
         private static string runtimePathLinux = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".minecraft", "runtime");

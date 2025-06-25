@@ -6,12 +6,14 @@ import { backIcon, close, github, globe, house, mml } from '.././assets/exports'
 
 const { ipcRenderer } = window.require('electron');
 
-const NewSettings = ({ toggleShowHome, profile, handleSignOut, handleSignIn }) => {
+const NewSettings = ({ toggleShowHome, profile, handleSignOut, handleSignIn, setLoadingProgress }) => {
     const [selectedSettings, setSelectedSettings] = useState('');
     const [profileSkinUrl, setProfileSkinUrl] = useState('');
     const [profileSkin, setProfileSkin] = useState('');
     const [profileVariant, setProfileVariant] = useState('');
     const [activeProfileVariant, setActiveProfileVariant] = useState('');
+
+    const ISDEV = false;
 
     const openWebsite = (url) => {
         ipcRenderer.send("open-website", url);
@@ -74,7 +76,7 @@ const NewSettings = ({ toggleShowHome, profile, handleSignOut, handleSignIn }) =
         });
 
         try {
-        //getPlayerSkin();    
+        getPlayerSkin();    
         } catch (error) {
             console.log("Error getting skin", error);
         }
@@ -210,13 +212,14 @@ const NewSettings = ({ toggleShowHome, profile, handleSignOut, handleSignIn }) =
             {/* 
             <div className='settings-about'>
                 <div className='settings-about-top'>
-                    <img className='settings-about-top-logo' draggable={false} src={mml} style={{ cursor: "pointer" }} onClick={() => openWebsite("https://t.minecraftmigos.me.netlify.app/")} />
+                    <img className='settings-about-top-logo' draggable={false} src={mml} style={{ cursor: "pointer" }} onClick={() => openWebsite("https://minecraftmigos.tech.netlify.app/")} />
                     <img className='settings-about-top-git' draggable={false} src={github} onClick={() => openWebsite("https://github.com/crazy-thing/the-mmm-launcher")} />
                 </div>
                 <p className='settings-about-version'> Minecraft Migos Launcher v2.0.6 </p>
             </div>
             */}
-            <p className='settings-version' onClick={() => openWebsite("https://github.com/crazy-thing/mml")}> Minecraft Migos Launcher v3.0.0-dev </p>
+            {ISDEV && (<span className='settings-api' onClick={() => ipcRenderer.send('show-api')}>API Access</span>)}
+            <p className='settings-version' onClick={() => openWebsite("https://github.com/crazy-thing/mml")}> Minecraft Migos Launcher 3.0.1 </p>
             <input type='file' id='fileInput' style={{ display: 'none' }} onChange={(e) => changeSkin(e.target.files[0])} />
         </div>
     );

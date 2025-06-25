@@ -62,7 +62,7 @@
 }
 
 .home__top-content {
-    width: 95%;
+    width: 90%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -76,35 +76,49 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: 1vh;
+    gap: 3vh;
 }
 
 .modpack-card {
     position: relative;
-    width: 32vh;
+    width: 26vh;
+    padding-left: 3vh;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+    cursor: pointer;
 
     &:not(:first-child)::before {
         content: '';
         position: absolute;
         left: 0;
-        top: 15%;
-        height: 70%;
-        width: 0.4vh;
-        background-color: #a6a6a6;
+        top: 20%;
+        height: 60%;
+        width: 0.5vh;
+        background-color: #a6a6a6; 
+        border-radius: 0.2vh;
     }
-    cursor: pointer;
+
+    &:nth-child(2)::before {
+        background-color: #ffffff;
+        box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.4);  
+    }
 }
+
+
 
 .modpack-card__image {
     height: 8vh;
     width: auto;
     max-width: 100%;
     object-fit: contain;
+    transition: transform 0.3s ease;
+
+}
+
+.modpack-card__image:hover {
+    transform: scale(1.08);
 }
 
 .modpack-card__status {

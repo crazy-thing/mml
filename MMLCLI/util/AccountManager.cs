@@ -7,6 +7,7 @@ using System.Text.Json;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Auth.Microsoft;
+using MMLCLI.Helpers;
 using MMLCLI.Models;
 
 namespace MMLCLI.Util
@@ -22,11 +23,11 @@ namespace MMLCLI.Util
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                jsonFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", "MML", "userAccounts.json");
+                jsonFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", IsDev.isDev ? "MMLDEV" : "MML", "userAccounts.json");
             }
             else
             {
-                jsonFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MML", "userAccounts.json");
+                jsonFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), IsDev.isDev ? "MMLDEV" : "MML", "userAccounts.json");
             }
         }
 

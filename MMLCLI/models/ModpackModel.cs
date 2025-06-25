@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using MMLCLI.Helpers;
 
 
 namespace MMLCLI.Models
@@ -33,7 +34,7 @@ namespace MMLCLI.Models
         public string jvm { get; set; }
         public string InstancePath
         {
-            get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MML", "Minecraft", "Instances", id); }
+            get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), IsDev.isDev ? "MMLDEV" : "MML", "Minecraft", "Instances", id); }
         }
     }
 }

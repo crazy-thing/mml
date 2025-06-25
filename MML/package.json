@@ -4,7 +4,7 @@
     "name": "Joshua Powell",
     "url": "https://github.com/crazy-thing/"
   },
-  "version": "2.0.11",
+  "version": "3.0.1",
   "private": true,
   "main": "public/main.js",
   "homepage": "./",
@@ -15,10 +15,7 @@
     "dist": "electron-builder",
     "dist-all": "electron-builder -mw",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "package-linux": "electron-packager . MML --platform=linux --arch=x64 --icon=./mml.ico",
-    "package-windows": "electron-packager . MML --platform=win32 --arch=x64 --icon=./mml.ico",
-    "package-macos": "electron-packager . MML --platform=darwin --arch=x64 --icon=./mml.ico"
+    "preview": "vite preview"
   },
   "build": {
     "appId": "com.JoshuaPowell.MML",
@@ -64,6 +61,7 @@
   "dependencies": {
     "electron-updater": "^6.3.2",
     "MML": "file:",
+    "MMLDEV": "file:",
     "msmc": "^5.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

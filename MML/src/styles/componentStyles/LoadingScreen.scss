@@ -1,5 +1,5 @@
 .loading-screen {
-    position: fixed;
+    position: absolute;
     left: 0;
     top: 0;
     display: flex;
@@ -25,7 +25,11 @@
   }
 
   .loading-screen-text {
+    position: absolute;
+    bottom: 16vh;
+    left: 15vh;
     margin: 0;
+    transition: opacity 1s ease-in-out;
   }
 
   .loading-screen-text.active {
@@ -46,26 +50,26 @@
   }
 
   .loading-bar {
-    margin-top: 2vh;
-    width: 30%; 
-    height: 1.8vh; 
+    position: absolute;
+    bottom: 11vh;
+    width: 152vh; 
+    height: 3.7vh; 
     background-color: #575757; 
-    border-radius: .5vh;
+    border-radius: 1vh;
     overflow: hidden;
-    position: relative;
 
   }
 
   .loading-bar.active {
     opacity: 0;
   }
-  
+
   .loading-bar-sway {
-    width: 40%; 
+    width: 0%;
     height: 100%;
-    background-color: #36c359;
-    position: absolute; 
-    animation: sway 1.5s ease-in-out infinite;
+    background: linear-gradient(to right, #38ad38, #62e162);
+    border-radius: 0%;
+    transition: width 0.6s ease-in-out;
   }
 
   @keyframes fadeLS {

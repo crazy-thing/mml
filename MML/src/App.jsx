@@ -13,6 +13,8 @@ function App() {
   const { ipcRenderer } = window.require('electron');
 
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+
   const [bars, setBars] = useState([]);
   const [showBars, setShowBars] = useState(false);
 
@@ -37,7 +39,7 @@ function App() {
   const [confettiInstances, setConfettiInstances] = useState([]);
   const [confettiNum, setConfettiNum] = useState(200);
 
-  const [isMainRendered, setIsMainRendered] = useState(true);
+  const [isMainRendered, setIsMainRendered] = useState(false);
 
   const [showSettings, setShowSettings] = useState(false);
   const [showHome, setShowHome] = useState(true);
@@ -45,6 +47,8 @@ function App() {
   const [transformOrigin, setTransformOrigin] = useState(null);
 
   const [ profile, setProfile ] = useState(null);
+
+  const [runningPack, setRunningPack] = useState(null);
 
   const getDefaultAccount = () => {
       ipcRenderer.send('sign-in');
@@ -142,6 +146,7 @@ function App() {
 
     ipcRenderer.on('installed-versions', (event, versions) => {
       handleSetNoChange(false);
+      setLoadingProgress(prev => prev + 50);
       setAllInstalledVersions(versions);
     });
 
@@ -197,7 +202,7 @@ function App() {
       console.log(result);
       if (result.ProfilePicture != null) {
         console.log("profile pic", result.ProfilePicture);
-        setIsLoading(false);
+        setLoadingProgress(prev => prev + 50);
         setProfile(result);
       }
     });
@@ -246,13 +251,12 @@ function App() {
   const selectModpack = (modpack) => {
     setSelectedModpack(modpack);
     setSelectedModpackId(modpack.id);
-    console.log("Selected Modpack: ", modpack, selectedModpackId);
   };
 
   return (
 
     <>
-      <LoadingScreen isLoading={isLoading} setShowBars={setShowBars} isMainRendered={isMainRendered} />
+      <LoadingScreen isLoading={isLoading} setShowBars={setShowBars} isMainRendered={isMainRendered} loadingProgress={loadingProgress} profile={profile} />
       <TopBar />
 
       <div className="transition-container">
@@ -289,6 +293,7 @@ function App() {
                 fetchData={fetchData}
                 selectedModpackId={selectedModpackId}
                 style={{ display: mp.id === selectedModpackId ? 'flex' : 'none' }}
+                setRunningPack={setRunningPack}
               />
             ))
           )}
@@ -300,6 +305,7 @@ function App() {
             profile={profile} 
             handleSignOut={handleSignOut} 
             handleSignIn={handleSignIn} 
+            setLoadingProgress={setLoadingProgress}
           />
         </div>
     </div>

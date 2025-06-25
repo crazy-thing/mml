@@ -1,10 +1,12 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using CmlLib.Core.Auth;
 using MMLCLI.Core;
 using MMLCLI.Helpers;
 using MMLCLI.Models;
 using MMLCLI.Util;
+using System.Runtime.InteropServices;
 
 namespace MMLCLI
 {
@@ -13,6 +15,30 @@ namespace MMLCLI
 
         static async Task Main(string[] args)
         {
+
+        string logFilePath;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            logFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", IsDev.isDev ? "MMLDEV" : "MML", "mmlcli.log");
+        }
+        else
+        {
+            logFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), IsDev.isDev ? "MMLDEV" : "MML", "mmlcli.log");
+        }
+
+        Directory.CreateDirectory(Path.GetDirectoryName(logFilePath)!);
+
+        if (File.Exists(logFilePath))
+        {
+            File.Delete(logFilePath);
+        }
+
+        var logFile = new StreamWriter(logFilePath, append: false) { AutoFlush = true };
+        TextWriter originalConsole = Console.Out;
+
+        Console.SetOut(new Logger(originalConsole, logFile));
+        Console.SetError(new Logger(Console.Error, logFile)); 
+
             Console.WriteLine("C# Backend Started \n");
             SettingsManager.LoadSettings();
             AccountManager.LoadAccounts();

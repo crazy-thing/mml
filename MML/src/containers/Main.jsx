@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { dots, folderIcon, trashIcon } from '../assets/exports';
 import Changelog from '../components/Changelog';
 
-const Main = ({mp, fetchData, selectedModpackId, style }) => {
+const Main = ({mp, fetchData, selectedModpackId, style, setRunningPack }) => {
 
     const { ipcRenderer } = window.require('electron');
 
@@ -23,6 +23,7 @@ const Main = ({mp, fetchData, selectedModpackId, style }) => {
     const [showStopGame, setShowStopGame] = useState(false);
     const [showOptions, setShowOptions] = useState(false);
     const [showMain, setShowMain] = useState(false);
+    
 
 
     useEffect(() => {
@@ -30,21 +31,22 @@ const Main = ({mp, fetchData, selectedModpackId, style }) => {
         setUpdate(false);
         setShowOptions(false);
         setInstalledVersion(null);
-    
-        //setIsMainRendered(true);
+
         if (mp && mp.id === selectedModpackId) {
+            console.log("Selected modpack ID matches:", mp.id);
             setShowMain(true);
             checkForUpdate();
         } else {
             setShowMain(false);
         }
-        console.log("Selected Modpack: ", mp);
-      }, [mp]);
+      }, [mp, selectedModpackId]);
 
     const checkForUpdate = () => {
+        console.log("checking for update");
+        
         if (mp && mp.mainVersion && mp.mainVersion.id === "null") {
             setUpdate(false);
-            console.log("coming soon");
+            console.log("no main version");
         } else {
             const lastInstalledVersion = JSON.parse(localStorage.getItem(`lastInstalledVersion${mp && mp.id}`));
             if (lastInstalledVersion && mp && mp.mainVersion && mp.mainVersion.id === lastInstalledVersion.id) {
@@ -54,7 +56,7 @@ const Main = ({mp, fetchData, selectedModpackId, style }) => {
                     if (mp && mp.mainVersion && mp.mainVersion.id === "null") {
                         console.log(lastInstalledVersion.id + " " + mp.mainVersion.id);
                         setUpdate(false);
-                        console.log("coming soon");
+                        console.log("no main version", lastInstalledVersion.id, mp.mainVersion.id);
                     } else {
                         setUpdate(true);
                         console.log("update available");
@@ -62,7 +64,18 @@ const Main = ({mp, fetchData, selectedModpackId, style }) => {
                 }
             }
         }
+        
     }
+    const getModpackButtonText = () => {
+      if (isInstalling) return `${buttonText}%`;
+      if (mp?.mainVersion?.zip === "null" || mp?.versions?.length === 0) return "COMING SOON";
+      if (update) return "UPDATE";
+      if (gameRunning) return "RUNNING";
+      if (showUninstall) return "WAITING...";
+      if (installedVersion) return "PLAY";
+      return "INSTALL";
+    };
+
 
     const comingSoonStyle = {
         background: "#818181"
@@ -102,6 +115,8 @@ const Main = ({mp, fetchData, selectedModpackId, style }) => {
     const handleLaunch = () => {
         if (installedVersion) {
         ipcRenderer.send("launch-game", mp.id);
+        localStorage.setItem('lastSelectedModpackId', JSON.stringify(mp.id));
+        setRunningPack(mp.id);
         setIsInstalling(true);
         }
     };
@@ -196,7 +211,7 @@ const Main = ({mp, fetchData, selectedModpackId, style }) => {
                     <div className='main__modpack__background'>
                         <img
                             className='main__modpack__background__image'
-                            src={`https://t.minecraftmigos.me/uploads/backgrounds/${mp.background}`}
+                            src={`https://minecraftmigos.tech/uploads/backgrounds/${mp.background}`}
                         />
                     </div>
                 )}
@@ -216,7 +231,9 @@ const Main = ({mp, fetchData, selectedModpackId, style }) => {
                                 : installedVersion ? () => handleLaunch()
                                 : () => handleInstallModpack(mp)}
                             >
-                            <span className='main__modpack__button-text'>{isInstalling ? `${buttonText}%` : (mp.mainVersion && mp.mainVersion.zip === "null") || (mp.versions && mp.versions.length === 0) ? "COMING SOON" : update ? "UPDATE" : gameRunning ? "RUNNING" : showUninstall ? "WAITING..." : installedVersion ? "PLAY" : "INSTALL"}</span >
+                              <span className='main__modpack__button-text'>
+                                {getModpackButtonText()}
+                              </span>
                             {isInstalling && (<span className='main__modpack__button-text-install'>{installText}</span> )}
                         </div>
                         <div className={`main__modpack__button-options ${showOptions ? "show" : ""}`}>

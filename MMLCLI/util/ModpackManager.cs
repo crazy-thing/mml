@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using MMLCLI.Models;
 using MMLCLI.Core;
 using System.Collections.Concurrent;
+using MMLCLI.Helpers;
 
 namespace MMLCLI.Util
 {
@@ -15,7 +16,7 @@ namespace MMLCLI.Util
     {
         private static readonly string modpacksDir;
         private static readonly string modpacksJsonFile;
-        private static readonly string baseApi = "https://t.minecraftmigos.me/example/v1/";
+        private static readonly string baseApi = "https://minecraftmigos.tech/example/v1/";
 
         public static ConcurrentDictionary<string, int> modpackPids = new ConcurrentDictionary<string, int>();
 
@@ -26,13 +27,13 @@ namespace MMLCLI.Util
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                modpacksDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", "MML", "Minecraft", "Instances");
-                modpacksJsonFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", "MML", "modpacks.json");
+                modpacksDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", IsDev.isDev ? "MMLDEV" : "MML", "Minecraft", "Instances");
+                modpacksJsonFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", IsDev.isDev ? "MMLDEV" : "MML", "modpacks.json");
             }
             else
             {
-                modpacksDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MML", "Minecraft", "Instances");
-                modpacksJsonFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MML", "modpacks.json");
+                modpacksDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), IsDev.isDev ? "MMLDEV" : "MML", "Minecraft", "Instances");
+                modpacksJsonFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), IsDev.isDev ? "MMLDEV" : "MML", "modpacks.json");
             }
         }
 

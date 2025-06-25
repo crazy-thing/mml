@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell, dialog, globalShortcut} = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog, globalShortcut, Menu} = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
@@ -33,7 +33,7 @@ function createWindow(showTitleBar = false) {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            devTools: isDev,
+            devTools: isDevBuild,
             enablePreferredSizeMode: true,
             zoomFactor: 1.0
         },
@@ -43,6 +43,19 @@ function createWindow(showTitleBar = false) {
         options.titleBarStyle = 'hidden';
         options.trafficLightPosition = { x: -20, y: -20 };
     }
+
+    const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Switch to Launcher',
+      click: () => {
+        showingApi = false;
+        win.close();
+        createWindow(false);
+      }
+    }
+  ]);
+
+
 
     win = new BrowserWindow(options);   
     if (!showTitleBar) {
@@ -154,8 +167,8 @@ function createWindow(showTitleBar = false) {
                 win.show();
                 break;
             case dataString.includes("settings-loaded"):
-                var settings = getSettings();
-                win.webContents.send('settings', settings);
+                //var settings = getSettings();
+               //win.webContents.send('settings', settings);
                 break;
             default:
                 break;
@@ -168,7 +181,7 @@ function createWindow(showTitleBar = false) {
     
     if (isDevBuild) {
         if (showingApi) {
-            win.loadURL('https://t.minecraftmigos.me');
+            win.loadURL('https://minecraftmigos.tech');
         } else {
             if (isDev) {
                 win.loadURL("http://localhost:5173/");
@@ -189,21 +202,22 @@ function createWindow(showTitleBar = false) {
     `);
 });
 
+    if (showingApi) {
+        win.webContents.on('context-menu', (event) => {
+            contextMenu.popup({
+                window: win,
+                x: event.x,
+                y: event.y
+                });
+        });
+    }
 };
+
+
 
 app.on('ready', function() {
     createWindow(false);
     autoUpdater.checkForUpdates();
-
-    if (isDevBuild) {
-        globalShortcut.register('Control+D', () => {
-            showingApi = !showingApi;
-
-            if (win) win.close();
-
-            createWindow(showingApi); 
-        });   
-    }
 });
   
   autoUpdater.on('update-downloaded', () => {
@@ -338,4 +352,11 @@ ipcMain.on('toggle-maximize', () => {
 // get-version
 ipcMain.on('get-version', (event, arg) => {
     event.reply('version', app.getVersion());
+});
+
+// show-api
+ipcMain.on('show-api', (event, arg) => {
+    showingApi = true;
+    win.close();
+    createWindow(true);
 });

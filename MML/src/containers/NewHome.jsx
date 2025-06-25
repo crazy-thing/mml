@@ -4,10 +4,10 @@ import '../styles/containerStyles/Home.scss';
 import { getAllModpacks } from '../util/api';
 
 
-const NewHome = ({ selectModpack, toggleShowSettings }) => {
+const NewHome = ({ selectModpack, toggleShowSettings, runningPack }) => {
     const [modpacks, setModpacks] = useState([]);
     const [isExpanded, setIsExpanded] = useState(false);
-    const DEV = true;
+    const DEV = false;
 
     useEffect(() => {
         const fetchModpacks = async () => {
@@ -25,7 +25,7 @@ const NewHome = ({ selectModpack, toggleShowSettings }) => {
             }
         };
         fetchModpacks();
-    }, []);
+    }, [runningPack]);
 
     const getRowCount = () => {
         const count = isExpanded ? modpacks.length : Math.min(modpacks.length, 5);
@@ -35,7 +35,16 @@ const NewHome = ({ selectModpack, toggleShowSettings }) => {
     const renderModpacks = () => {
         if (modpacks.length === 0) return;
 
-        const visibleModpacks = isExpanded ? modpacks : modpacks.slice(0, 5);
+        const lastId = localStorage.getItem("lastSelectedModpackId")?.replace(/^"+|"+$/g, "");
+
+        const sortedModpacks = [...modpacks];
+        const lastIndex = sortedModpacks.findIndex(modpack => modpack.id === lastId);
+        if (lastIndex !== -1) {
+            const [lastModpack] = sortedModpacks.splice(lastIndex, 1);
+            sortedModpacks.unshift(lastModpack);
+        }
+
+        const visibleModpacks = isExpanded ? sortedModpacks : sortedModpacks.slice(0, 5);
         const rows = [];
 
         for (let i = 0; i < visibleModpacks.length; i += 5) {
@@ -45,13 +54,12 @@ const NewHome = ({ selectModpack, toggleShowSettings }) => {
                     {rowItems.map((modpack, index) => (
                         <div className='modpack-card' key={index} onClick={() => selectModpack(modpack)}>
                             <img
-                                src={`https://t.minecraftmigos.me/uploads/thumbnails/${modpack.thumbnail}`}
+                                src={`https://minecraftmigos.tech/uploads/thumbnails/${modpack.thumbnail}`}
                                 alt={modpack.name}
                                 className='modpack-card__image'
                             />
                             {modpack.status === "dev" && (<span className='modpack-card__status'>DEV</span>)}
                         </div>
-
                     ))}
                 </div>
             );
@@ -59,6 +67,7 @@ const NewHome = ({ selectModpack, toggleShowSettings }) => {
 
         return rows;
     };
+
 
     const rowCount = getRowCount();
     const height = `${11 * rowCount}vh`;
@@ -78,13 +87,15 @@ const NewHome = ({ selectModpack, toggleShowSettings }) => {
                 <div className='home__top-content'>
                     {renderModpacks()}
                 </div>
-                <img
-                    src={dropdown}
-                    alt="Toggle"
-                    className={`home__top-arrows ${isExpanded ? 'rotated' : ''}`}
-                    draggable={false}
-                    onClick={modpacks && modpacks.length > 5 ? () => setIsExpanded(prev => !prev) : console.log("Not enough modpacks to expand")}
-                />
+                {modpacks && modpacks.length > 5 && (
+                    <img
+                        src={dropdown}
+                        alt="Toggle"
+                        className={`home__top-arrows ${isExpanded ? 'rotated' : ''}`}
+                        draggable={false}
+                        onClick={() => setIsExpanded(prev => !prev)}
+                    />
+                )}
             </div>
         </div>
         </>

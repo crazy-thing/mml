@@ -1,6 +1,6 @@
 import React from 'react';
 
-const API = "https://t.minecraftmigos.me/uploads/";
+const API = "https://minecraftmigos.tech/uploads/";
 
 const ModBanner = ({ thumbnail, name}) => {
   return (
