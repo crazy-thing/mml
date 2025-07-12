@@ -125,7 +125,37 @@ const signIn = async () => {
         return UserAccount;        
 };
 
+const checkUsernameExists = async (username) => {
+    if (!username || typeof username !== 'string' || !username.trim()) {
+        console.error("Invalid username input.");
+        return false;
+    }
+
+    try {
+        const response = await fetch('https://minecraftmigos.tech/example/v1/check-username', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: username.trim() })
+        });
+
+        if (!response.ok) {
+            console.error(`Server responded with status: ${response.status}`);
+            return false;
+        }
+
+        const exists = await response.json(); 
+        return exists === true;
+    } catch (error) {
+        console.error('Error checking username:', error);
+        return false;
+    }
+};
+
+
 module.exports = { 
     getDefaultAccount,
-    signIn
+    signIn,
+    checkUsernameExists
 };

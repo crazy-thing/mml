@@ -59,7 +59,7 @@ namespace MMLCLI.Core {
                         }
                         string instancePath = Path.Combine(modpacksDir, modpack.id);
 
-                        if (modpack.mainVersion.clean == "true")
+                        if (modpack.mainVersion.clean == true)
                         {
                             Console.WriteLine("Cleaning instance directory...");
                             if (Directory.Exists(instancePath))

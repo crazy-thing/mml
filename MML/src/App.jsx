@@ -78,6 +78,7 @@ function App() {
         const indexB = b.index ? Number(b.index) : Infinity;
         return indexA - indexB;
       });
+      console.log("Sorted Modpacks: ", sortedModpacks);
       setAllModpacks(sortedModpacks);
     
       if (selectedModpackId == null) {

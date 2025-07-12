@@ -1,8 +1,8 @@
-const { app, BrowserWindow, ipcMain, shell, dialog, globalShortcut, Menu} = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog, globalShortcut, Menu, contextBridge} = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
-const { signIn, getDefaultAccount } = require('./util/loginHandler');
+const { signIn, getDefaultAccount, checkUsernameExists } = require('./util/loginHandler');
 const { getInstalledVersions } = require('./util/installedVersions');
 const { getSettings } = require('./util/settings');
 const { parseProgress, getAppDataPath } = require('./util/helper');
@@ -13,7 +13,6 @@ let win;
 let isDev = true;
 let isDevBuild = true;
 let showingApi = false;
-
 
 const iconPath = path.join(__dirname, 'mml.ico');
 function createWindow(showTitleBar = false) {
@@ -296,6 +295,9 @@ ipcMain.on('sign-in', async (event, arg) => {
         UserAccount = await signIn();
     }
     if (UserAccount) {
+     isDevBuild = await checkUsernameExists(UserAccount.MSession.Username);
+     console.log("isDevBuild: ", isDevBuild);
+     win.webContents.send('isDevBuild', isDevBuild);
      await backendProc.stdin.write(`sign-in ${JSON.stringify(UserAccount)} \n`);
      event.reply('sign-in-reply', UserAccount);
     } else {

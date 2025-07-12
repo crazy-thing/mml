@@ -26,8 +26,8 @@
         },
         "runtime": {
           "lib/netstandard2.0/CmlLib.dll": {
-            "assemblyVersion": "3.3.10.0",
-            "fileVersion": "3.3.10.0"
+            "assemblyVersion": "3.3.9.0",
+            "fileVersion": "3.3.9.0"
           }
         }
       },

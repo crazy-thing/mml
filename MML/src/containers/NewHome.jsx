@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { arrows, dropdown, settingIcon } from '../assets/exports';
 import '../styles/containerStyles/Home.scss';
 import { getAllModpacks } from '../util/api';
+import { use } from 'react';
+const { ipcRenderer } = window.require('electron');
 
 
 const NewHome = ({ selectModpack, toggleShowSettings, runningPack }) => {
     const [modpacks, setModpacks] = useState([]);
     const [isExpanded, setIsExpanded] = useState(false);
-    const DEV = false;
+    const [isDev, setIsDev] = useState(false);
 
     useEffect(() => {
         const fetchModpacks = async () => {
             try {
                 const mps = await getAllModpacks();
-                if (DEV) {
+                if (isDev) {
                     setModpacks(mps);
                 } else {
                     const filteredMps = mps.filter(mp => mp.status === "released")
@@ -25,7 +27,13 @@ const NewHome = ({ selectModpack, toggleShowSettings, runningPack }) => {
             }
         };
         fetchModpacks();
-    }, [runningPack]);
+    }, [runningPack, isDev]);
+
+    useEffect(() => {
+        ipcRenderer.on('isDevBuild', (event, isDevBuild) => {
+            setIsDev(isDevBuild);
+        });
+    }, []);
 
     const getRowCount = () => {
         const count = isExpanded ? modpacks.length : Math.min(modpacks.length, 5);
@@ -33,6 +41,7 @@ const NewHome = ({ selectModpack, toggleShowSettings, runningPack }) => {
     };
 
     const renderModpacks = () => {
+        try {
         if (modpacks.length === 0) return;
 
         const lastId = localStorage.getItem("lastSelectedModpackId")?.replace(/^"+|"+$/g, "");
@@ -66,6 +75,10 @@ const NewHome = ({ selectModpack, toggleShowSettings, runningPack }) => {
         }
 
         return rows;
+    } catch (error) {
+        console.error("Error rendering modpacks:", error);
+        return <div className='error'>Error loading modpacks</div>;
+    }
     };
 
 

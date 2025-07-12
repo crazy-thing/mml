@@ -5,7 +5,7 @@ import Release from './Release';
 const Changelog = ({ versions }) => {
   const [showNewest, setShowNewest] = useState(true);
 
-  const visibleVersions = versions.filter(version => version.visible === "true");
+  const visibleVersions = versions.filter(version => version.visible === true);
   const sortedVersions = showNewest ? [...visibleVersions].reverse() : visibleVersions;
   
   

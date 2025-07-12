@@ -12,8 +12,7 @@ const NewSettings = ({ toggleShowHome, profile, handleSignOut, handleSignIn, set
     const [profileSkin, setProfileSkin] = useState('');
     const [profileVariant, setProfileVariant] = useState('');
     const [activeProfileVariant, setActiveProfileVariant] = useState('');
-
-    const ISDEV = false;
+    const [isDev, setIsDev] = useState(false);
 
     const openWebsite = (url) => {
         ipcRenderer.send("open-website", url);
@@ -75,6 +74,11 @@ const NewSettings = ({ toggleShowHome, profile, handleSignOut, handleSignIn, set
             console.log(result);
         });
 
+        ipcRenderer.on('isDevBuild', (event, isDevBuild) => {
+            setIsDev(isDevBuild);
+            console.log("isDevBuild: ", isDevBuild);
+        });
+
         try {
         getPlayerSkin();    
         } catch (error) {
@@ -84,6 +88,7 @@ const NewSettings = ({ toggleShowHome, profile, handleSignOut, handleSignIn, set
 
         return () => {
             ipcRenderer.removeAllListeners('settings');
+            ipcRenderer.removeAllListeners('isDevBuild');
         };
 
     }, [profile]);
@@ -218,8 +223,8 @@ const NewSettings = ({ toggleShowHome, profile, handleSignOut, handleSignIn, set
                 <p className='settings-about-version'> Minecraft Migos Launcher v2.0.6 </p>
             </div>
             */}
-            {ISDEV && (<span className='settings-api' onClick={() => ipcRenderer.send('show-api')}>API Access</span>)}
-            <p className='settings-version' onClick={() => openWebsite("https://github.com/crazy-thing/mml")}> Minecraft Migos Launcher 3.0.1 </p>
+            {isDev && (<span className='settings-api' onClick={() => ipcRenderer.send('show-api')}>API Access</span>)}
+            <p className='settings-version' onClick={() => openWebsite("https://github.com/crazy-thing/mml")}> Minecraft Migos Launcher 3.0.2 </p>
             <input type='file' id='fileInput' style={{ display: 'none' }} onChange={(e) => changeSkin(e.target.files[0])} />
         </div>
     );
