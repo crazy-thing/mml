@@ -9,7 +9,7 @@ namespace MMLCLI.Core {
     public class Downloader
     {
         private static string apiKey = "$2a$10$PRMYXEXiKwjYUhsefOaeneSfam4VrzBImlKXPfd8d74Jc6Z0XdKPi";
-        private static readonly string baseApi = "https://minecraftmigos.tech/example/v1/";
+        private static readonly string baseApi = "https://minecraftmigos.tech/example/v1";
         private static string baseApiUrl = "https://api.curseforge.com/v1/mods/";
         private static string baseModPackDownloadUrl = "https://www.curseforge.com/api/v1/mods";
         private static readonly string modpacksDir;
@@ -58,15 +58,31 @@ namespace MMLCLI.Core {
                             fileName = modpack.mainVersion.zip;
                         }
                         string instancePath = Path.Combine(modpacksDir, modpack.id);
+                        Console.WriteLine($"Modpack CClean: {modpack.mainVersion.clean}");
 
-                        if (modpack.mainVersion.clean == true)
+                        Console.WriteLine($"Modpack CClean: {modpack.mainVersion.clean}");
+
+                        if (modpack.mainVersion.clean == null)
+                        {
+                            modpack.mainVersion.clean = "false"; 
+                        }
+                        if (modpack.mainVersion.clean.ToString() == "true" || modpack.mainVersion.clean.ToString() == "True")
                         {
                             Console.WriteLine("Cleaning instance directory...");
+
+                            Console.WriteLine($"Checking if instance directory exists at: {instancePath}");
                             if (Directory.Exists(instancePath))
                             {
+                                Console.WriteLine("Deleting directory...");
                                 Directory.Delete(instancePath, true);
                             }
+                            else
+                            {
+                                Console.WriteLine("Directory does not exist.");
+                            }
                         }
+                        
+
                         Directory.CreateDirectory(instancePath); 
 
                         string filePath = Path.Combine(instancePath, fileName);

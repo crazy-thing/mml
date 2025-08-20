@@ -16,7 +16,7 @@ namespace MMLCLI.Util
     {
         private static readonly string modpacksDir;
         private static readonly string modpacksJsonFile;
-        private static readonly string baseApi = "https://minecraftmigos.tech/example/v1/";
+        private static readonly string baseApi = "https://minecraftmigos.tech/example/v1";
 
         public static ConcurrentDictionary<string, int> modpackPids = new ConcurrentDictionary<string, int>();
 

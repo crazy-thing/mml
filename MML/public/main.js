@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell, dialog, globalShortcut, Menu, contextBridge} = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog, globalShortcut, Menu } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
@@ -7,82 +7,32 @@ const { getInstalledVersions } = require('./util/installedVersions');
 const { getSettings } = require('./util/settings');
 const { parseProgress, getAppDataPath } = require('./util/helper');
 const { autoUpdater } = require('electron-updater');
-const { sign } = require('crypto');
 
 let win;
+let backendProc;
 let isDev = true;
-let isDevBuild = true;
+let isDevBuild = false;
 let showingApi = false;
 
 const iconPath = path.join(__dirname, 'mml.ico');
-function createWindow(showTitleBar = false) {
 
-    const initialWidth = 1600; 
-    const initialHeight = 900; 
-    const ratio = initialWidth / initialHeight;
+function spawnBackend() {
+    if (backendProc) return; // don't spawn twice
 
-    const options = {
-        width: initialWidth,
-        height: initialHeight,
-        minWidth: 900,
-        minHeight: 508,
-        autoHideMenuBar: true,
-        resizable: true,
-        icon: iconPath,
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-            devTools: isDevBuild,
-            enablePreferredSizeMode: true,
-            zoomFactor: 1.0
-        },
-    }
+    backendProc = isDev
+        ? spawn('dotnet', ['run', '--project', path.join(process.cwd(), '../MMLCLI/MMLCLI.csproj')])
+        : spawn(path.join(__dirname, "backend", "MMLCLI.exe"));
 
-    if (!showTitleBar) {
-        options.titleBarStyle = 'hidden';
-        options.trafficLightPosition = { x: -20, y: -20 };
-    }
-
-    const contextMenu = Menu.buildFromTemplate([
-    {
-      label: 'Switch to Launcher',
-      click: () => {
-        showingApi = false;
-        win.close();
-        createWindow(false);
-      }
-    }
-  ]);
-
-
-
-    win = new BrowserWindow(options);   
-    if (!showTitleBar) {
-        win.setAspectRatio(1.77);
-    } else {
-        win.setAspectRatio(0);
-    }
-
-
-    win.webContents.on('before-input-event', (event, input) => {
-        const disabledShortcuts = [
-            'Tab',
-            'Alt',
-            'Control+-', 
-            'Control+=',  
-            'Control+Plus', 
-        ];
-    
-        const shortcut = `${input.control ? 'Control+' : ''}${input.shift ? 'Shift+' : ''}${input.key}`;
-    
-        if (disabledShortcuts.includes(shortcut)) {
-          event.preventDefault();
-        }
+    backendProc.on('error', (err) => {
+        console.error('Failed to start C# backend', err);
     });
-    
-    
+}
 
-    backendProc = isDev ? spawn('dotnet', ['run', '--project', path.join(process.cwd(), '../MMLCLI/MMLCLI.csproj')]) :  spawn(path.join(__dirname, "backend", "MMLCLI.exe")); // MMLCLI for linux and macos
+function attachBackendListeners() {
+    if (!backendProc) return;
+
+    // Remove any existing listeners to avoid duplicates
+    backendProc.stdout.removeAllListeners('data');
 
     backendProc.stdout.on('data', (data) => {
         console.log(`C# Backend Process: ${data}`);
@@ -122,62 +72,105 @@ function createWindow(showTitleBar = false) {
                                 break;
                         }
                         win.webContents.send('update-progress', progress, id, msg);
-                    } else {
-                        console.log("No progress change detected");
                     }
                 } catch (error) {
                     console.log(error);
                 }
                 break;
+
             case dataString.includes("Install-Complete"):
-                const modpackId = dataString.split(' ')[1];
-                console.log("Install Complete: ", modpackId);
-                win.webContents.send("install-complete", modpackId);
+                win.webContents.send("install-complete", dataString.split(' ')[1]);
                 break;
             case dataString.includes("uninstall-complete"):
-                const modpackId2 = dataString.split(' ')[1];
-                win.webContents.send("uninstall-complete", modpackId2);
+                win.webContents.send("uninstall-complete", dataString.split(' ')[1]);
                 break;
             case dataString.includes("no-account"):
-                const modpackId3 = dataString.split(' ')[0];
-                win.webContents.send("error-launching", modpackId3);
+                win.webContents.send("error-launching", dataString.split(' ')[0]);
                 showErrorMessage("Not signed in. Please sign-in to your Microsoft account.");
                 break;
             case dataString.includes("error-launching"):
-                const modpackId4 = dataString.split(' ')[0];
-                win.webContents.send("error-launching", modpackId4);
+                win.webContents.send("error-launching", dataString.split(' ')[0]);
                 showErrorMessage("Error launching game. Please confirm you are signed-in and have selected a version.");
                 break;
             case dataString.includes("game-launched"):
-                const modpackId5 = dataString.split(' ')[0];
-                win.webContents.send("game-launched", modpackId5.toString());
+                win.webContents.send("game-launched", dataString.split(' ')[0]);
                 var settings = getSettings();
                 if (settings.MinimizeLauncher === true) {
                     win.minimize();
                 } else if (settings.ExitLauncher === true) {
                     app.quit();
-                } else {
-                    console.log("Game Launched!");
                 }
                 break;
             case dataString.includes("game-closed"):
-                const modpackId6 = dataString.split(' ')[0];
-                win.webContents.send("game-closed", modpackId6);
+                win.webContents.send("game-closed", dataString.split(' ')[0]);
                 win.show();
-                break;
-            case dataString.includes("settings-loaded"):
-                //var settings = getSettings();
-               //win.webContents.send('settings', settings);
-                break;
-            default:
                 break;
         }
     });
+}
 
-    backendProc.on('error', (err) => {
-        console.error('Failed to start C# backend', err);
+function createWindow(showTitleBar = false) {
+    const initialWidth = 1600;
+    const initialHeight = 900;
+
+    const options = {
+        width: initialWidth,
+        height: initialHeight,
+        minWidth: 900,
+        minHeight: 508,
+        autoHideMenuBar: true,
+        resizable: true,
+        icon: iconPath,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+            devTools: false,
+            enablePreferredSizeMode: true,
+            zoomFactor: 1.0
+        },
+    };
+
+    if (!showTitleBar) {
+        options.titleBarStyle = 'hidden';
+        options.trafficLightPosition = { x: -20, y: -20 };
+    }
+
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label: 'Switch to Launcher',
+            click: () => {
+                showingApi = false;
+                win.close();
+                createWindow(false);
+            }
+        }
+    ]);
+
+    win = new BrowserWindow(options);
+
+    if (!showTitleBar) {
+        win.setAspectRatio(1.77);
+    } else {
+        win.setAspectRatio(0);
+    }
+
+    win.webContents.on('before-input-event', (event, input) => {
+        const disabledShortcuts = [
+            'Tab',
+            'Alt',
+            'Control+-',
+            'Control+=',
+            'Control+Plus',
+        ];
+        const shortcut = `${input.control ? 'Control+' : ''}${input.shift ? 'Shift+' : ''}${input.key}`;
+        if (disabledShortcuts.includes(shortcut)) {
+            event.preventDefault();
+        }
     });
-    
+
+    // Attach backend output to the new window
+    attachBackendListeners();
+
     if (isDevBuild) {
         if (showingApi) {
             win.loadURL('https://minecraftmigos.tech');
@@ -192,145 +185,118 @@ function createWindow(showTitleBar = false) {
         isDev ? win.loadURL("http://localhost:5173/") : win.loadURL(`file://${path.join(__dirname, 'index.html')}`);
     }
 
-   win.webContents.on('did-finish-load', () => {
-    win.webContents.insertCSS(`
-        /* Hide the default symbols */
-        .titlebar-overlay .titlebar-button {
-            display: none !important;
-        }
-    `);
-});
+    win.webContents.on('did-finish-load', () => {
+        win.webContents.insertCSS(`
+            .titlebar-overlay .titlebar-button {
+                display: none !important;
+            }
+        `);
+    });
 
     if (showingApi) {
         win.webContents.on('context-menu', (event) => {
-            contextMenu.popup({
-                window: win,
-                x: event.x,
-                y: event.y
-                });
+            contextMenu.popup({ window: win, x: event.x, y: event.y });
         });
     }
-};
+}
 
-
-
-app.on('ready', function() {
+app.on('ready', function () {
+    spawnBackend();
     createWindow(false);
     autoUpdater.checkForUpdates();
 });
-  
-  autoUpdater.on('update-downloaded', () => {
+
+autoUpdater.on('update-downloaded', () => {
     dialog.showMessageBox({
-      type: 'info',
-      title: 'Update ready',
-      message: 'A new update is ready. Restart the application to apply the updates.',
-      buttons: ['Restart', 'Later']
+        type: 'info',
+        title: 'Update ready',
+        message: 'A new update is ready. Restart the application to apply the updates.',
+        buttons: ['Restart', 'Later']
     }).then(result => {
-      if (result.response === 0) {
-        autoUpdater.quitAndInstall(false, true);
-      }
+        if (result.response === 0) {
+            autoUpdater.quitAndInstall(false, true);
+        }
     });
-  });
+});
 
 const showErrorMessage = (message) => {
     dialog.showMessageBox(win, {
         type: 'error',
-        title: 'uh Oh!',
+        title: 'Uh Oh!',
         message: message,
         buttons: ['OK'],
-        icon: iconPath     
+        icon: iconPath
     });
 };
 
-// get-installed-versions
-ipcMain.on('get-installed-versions', (event, arg) => {
-    var versions = getInstalledVersions();
-    event.reply('installed-versions', versions);
+// IPC handlers
+ipcMain.on('get-installed-versions', (event) => {
+    event.reply('installed-versions', getInstalledVersions());
 });
 
-// get-settings
-ipcMain.on('get-settings', (event, arg) => {
-    var settings = getSettings();
-    event.reply('settings', settings);
+ipcMain.on('get-settings', (event) => {
+    event.reply('settings', getSettings());
 });
 
-// download-modpack <modpackModel>
 ipcMain.on('download-modpack', (event, arg) => {
     backendProc.stdin.write(`download-modpack ${arg} \n`);
-    console.log("installed main");
 });
 
-// download-lite-modpack <modpackModel>
 ipcMain.on('download-lite-modpack', (event, arg) => {
     backendProc.stdin.write(`download-lite-modpack ${arg} \n`);
-    console.log("installed lite");
-
 });
 
-// delete-modpack <modpackId>
 ipcMain.on('delete-modpack', (event, arg) => {
     backendProc.stdin.write(`delete-modpack ${JSON.stringify(arg)}\n`);
 });
 
-// launch-game <modpackId> 
 ipcMain.on('launch-game', (event, arg) => {
     backendProc.stdin.write(`launch-game ${arg}\n`);
 });
 
-// exit-game 
 ipcMain.on('exit-game', (event, arg) => {
     backendProc.stdin.write(`exit-game ${arg}\n`);
 });
 
-// cancel-game <modpackId>
 ipcMain.on('cancel-game', (event, arg) => {
     backendProc.stdin.write(`cancel-game ${arg}\n`);
 });
 
-
-// sign-in <userAccountModel>
-ipcMain.on('sign-in', async (event, arg) => {
+ipcMain.on('sign-in', async (event) => {
     let UserAccount = await signIn();
     if (UserAccount == null) {
         UserAccount = await signIn();
     }
     if (UserAccount) {
-     isDevBuild = await checkUsernameExists(UserAccount.MSession.Username);
-     console.log("isDevBuild: ", isDevBuild);
-     win.webContents.send('isDevBuild', isDevBuild);
-     await backendProc.stdin.write(`sign-in ${JSON.stringify(UserAccount)} \n`);
-     event.reply('sign-in-reply', UserAccount);
+        isDevBuild = await checkUsernameExists(UserAccount.MSession.Username);
+        win.webContents.send('isDevBuild', isDevBuild);
+        backendProc.stdin.write(`sign-in ${JSON.stringify(UserAccount)} \n`);
+        event.reply('sign-in-reply', UserAccount);
     } else {
-     event.reply('sign-in-failed', "Sign-in failed");
-    } 
- });
- 
- // sign-out <gamerTag>
- ipcMain.on('sign-out', async (event, arg) => {
-     backendProc.stdin.write(`sign-out ${arg}\n`);
- });
+        event.reply('sign-in-failed', "Sign-in failed");
+    }
+});
 
- // change-setting <settingName> <value>
+ipcMain.on('sign-out', (event, arg) => {
+    backendProc.stdin.write(`sign-out ${arg}\n`);
+});
+
 ipcMain.on('change-setting', (event, arg) => {
     backendProc.stdin.write(`change-setting ${arg[0]} ${arg[1]} \n`);
 });
 
-// show-error <errorMessage>
 ipcMain.on('show-error', (event, arg) => {
     showErrorMessage(arg);
 });
 
-// open-folder <path>
-ipcMain.on('open-folder', (event, p) => {    
+ipcMain.on('open-folder', (event, p) => {
     shell.openPath(path.join(getAppDataPath(), "Minecraft", "Instances", p));
 });
 
-// ipc call to open mml website
 ipcMain.on('open-website', (event, url) => {
     shell.openExternal(url);
 });
 
-// handle window controls
 ipcMain.on('close-window', () => {
     win.close();
 });
@@ -345,19 +311,17 @@ ipcMain.on('maximize-window', () => {
 
 ipcMain.on('toggle-maximize', () => {
     if (win.isMaximized()) {
-      win.unmaximize();
+        win.unmaximize();
     } else {
-      win.maximize();
+        win.maximize();
     }
-  });
+});
 
-// get-version
-ipcMain.on('get-version', (event, arg) => {
+ipcMain.on('get-version', (event) => {
     event.reply('version', app.getVersion());
 });
 
-// show-api
-ipcMain.on('show-api', (event, arg) => {
+ipcMain.on('show-api', () => {
     showingApi = true;
     win.close();
     createWindow(true);

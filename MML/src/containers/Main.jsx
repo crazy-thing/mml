@@ -1,30 +1,28 @@
 import NewHome from './NewHome'
 import '../styles/containerStyles/Main.scss'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { dots, folderIcon, trashIcon } from '../assets/exports';
 import Changelog from '../components/Changelog';
 
-const Main = ({mp, fetchData, selectedModpackId, style, setRunningPack }) => {
+const Main = ({ mp, fetchData, selectedModpackId, style, setRunningPack }) => {
 
     const { ipcRenderer } = window.require('electron');
 
     const [installedVersion, setInstalledVersion] = useState(null);
-
     const [update, setUpdate] = useState(false);
-
     const [isInstalling, setIsInstalling] = useState(false);
     const [buttonText, setButtonText] = useState("0");
     const [installText, setInstallText] = useState("");
     const [progress, setProgress] = useState(100);
     const [gameRunning, setGameRunning] = useState(false);
     const [verInstalling, setVerInstalling] = useState(null);
-
     const [showUninstall, setShowUninstall] = useState(false);
     const [showStopGame, setShowStopGame] = useState(false);
     const [showOptions, setShowOptions] = useState(false);
     const [showMain, setShowMain] = useState(false);
-    
 
+    // Ref for playtime timer
+    const playtimeIntervalRef = useRef(null);
 
     useEffect(() => {
         setShowUninstall(false);
@@ -33,20 +31,16 @@ const Main = ({mp, fetchData, selectedModpackId, style, setRunningPack }) => {
         setInstalledVersion(null);
 
         if (mp && mp.id === selectedModpackId) {
-            console.log("Selected modpack ID matches:", mp.id);
             setShowMain(true);
             checkForUpdate();
         } else {
             setShowMain(false);
         }
-      }, [mp, selectedModpackId]);
+    }, [mp, selectedModpackId]);
 
     const checkForUpdate = () => {
-        console.log("checking for update");
-        
         if (mp && mp.mainVersion && mp.mainVersion.id === "null") {
             setUpdate(false);
-            console.log("no main version");
         } else {
             const lastInstalledVersion = JSON.parse(localStorage.getItem(`lastInstalledVersion${mp && mp.id}`));
             if (lastInstalledVersion && mp && mp.mainVersion && mp.mainVersion.id === lastInstalledVersion.id) {
@@ -54,50 +48,35 @@ const Main = ({mp, fetchData, selectedModpackId, style, setRunningPack }) => {
             } else {
                 if (lastInstalledVersion != null) {
                     if (mp && mp.mainVersion && mp.mainVersion.id === "null") {
-                        console.log(lastInstalledVersion.id + " " + mp.mainVersion.id);
                         setUpdate(false);
-                        console.log("no main version", lastInstalledVersion.id, mp.mainVersion.id);
                     } else {
                         setUpdate(true);
-                        console.log("update available");
                     }
                 }
             }
         }
-        
-    }
-    const getModpackButtonText = () => {
-      if (isInstalling) return `${buttonText}%`;
-      if (mp?.mainVersion?.zip === "null" || mp?.versions?.length === 0) return "COMING SOON";
-      if (update) return "UPDATE";
-      if (gameRunning) return "RUNNING";
-      if (showUninstall) return "WAITING...";
-      if (installedVersion) return "PLAY";
-      return "INSTALL";
     };
 
+    const getModpackButtonText = () => {
+        if (isInstalling) return `${buttonText}%`;
+        if (mp?.mainVersion?.zip === "null" || mp?.versions?.length === 0) return "COMING SOON";
+        if (update) return "UPDATE";
+        if (gameRunning) return "RUNNING";
+        if (showUninstall) return "WAITING...";
+        if (installedVersion) return "PLAY";
+        return "INSTALL";
+    };
 
-    const comingSoonStyle = {
-        background: "#818181"
-    }
-
-    const updateStyle = {
-        background: "#1383df"
-    }
-
-    const runningStyle = {
-        background: "#45627a",
-    }
-
-    const defaultStyle = {
-        background: `${`linear-gradient(90deg, #49a749 ${progress}%, #686868 ${progress}%)`}`
-    }
+    const comingSoonStyle = { background: "#818181" };
+    const updateStyle = { background: "#1383df" };
+    const runningStyle = { background: "#45627a" };
+    const defaultStyle = { background: `${`linear-gradient(90deg, #49a749 ${progress}%, #686868 ${progress}%)`}` };
 
     const handleProg = (prog, progText) => {
         if (prog != null) {
-        setButtonText(prog);
-        setProgress(prog);
-        setInstallText(progText);
+            setButtonText(prog);
+            setProgress(prog);
+            setInstallText(progText);
         }
     };
 
@@ -114,10 +93,10 @@ const Main = ({mp, fetchData, selectedModpackId, style, setRunningPack }) => {
 
     const handleLaunch = () => {
         if (installedVersion) {
-        ipcRenderer.send("launch-game", mp.id);
-        localStorage.setItem('lastSelectedModpackId', JSON.stringify(mp.id));
-        setRunningPack(mp.id);
-        setIsInstalling(true);
+            ipcRenderer.send("launch-game", mp.id);
+            localStorage.setItem('lastSelectedModpackId', JSON.stringify(mp.id));
+            setRunningPack(mp.id);
+            setIsInstalling(true);
         }
     };
 
@@ -126,158 +105,167 @@ const Main = ({mp, fetchData, selectedModpackId, style, setRunningPack }) => {
         setShowStopGame(false);
     };
 
-    useEffect(() => {
-            ipcRenderer.on('install-complete', (event, modpackId) => {
-              modpackId = modpackId.toString().trim();
-              const currentModpackId = mp.id.toString().trim(); 
-              console.log(`Received modpackId: [${modpackId}]`);
-              console.log(`Current modpack.id: [${currentModpackId}]`);
-              fetchData();
-          
-              if (modpackId === currentModpackId) {
-                  localStorage.setItem(`lastInstalledVersion${mp && mp.id}`, JSON.stringify(mp.mainVersion));
-                  setInstalledVersion(mp.mainVersion);
-                  setIsInstalling(false);
-                  setVerInstalling(null);
-                  setProgress(100);
-              }
-          });
-      
-      
-          ipcRenderer.on('game-launched', (event, modpackId) => {
-            console.log("Game Launched" + modpackId + " " + mp.id);
-            modpackId = modpackId.toString().trim();
-            if (modpackId === mp.id) {
-              setIsInstalling(false);
-              setGameRunning(true);
-              setProgress(100);
-            }
-          });
-    
-          ipcRenderer.on('error-launching', (event, modpackId) => {
-            modpackId = modpackId.toString().trim();
-            if (modpackId === mp.id) {
-              setIsInstalling(false);
-              setGameRunning(false);
-              setButtonText("PLAY");
-              setProgress(100);
-    
-            }
-          });
-      
-          ipcRenderer.on('game-closed', (event, modpackId) => {
-            if (modpackId === mp.id) {
-              setGameRunning(false);
-              setProgress(100);
-            }
-          });
-      
-          ipcRenderer.on('uninstall-complete', (event, modpackId) => {
-            if (modpackId === mp.id) {
-              setInstalledVersion(null);
-              setVerInstalling(null);
-              setShowUninstall(false);
-              setUpdate(false);
-              fetchData();
-              localStorage.removeItem(`lastInstalledVersion${mp && mp.id}`);
-            }
-          });
-      
-          ipcRenderer.on('update-progress', (event, prog, id, progText) => {
-            if (id === mp.id) {
-              handleProg(prog, progText);
-            }
-          });
+    // --- Playtime tracking ---
+    const startPlaytimeCounter = (packId) => {
+        if (playtimeIntervalRef.current) clearInterval(playtimeIntervalRef.current);
+        playtimeIntervalRef.current = setInterval(() => {
+            const key = `timePlayed_${packId}`;
+            let currentTime = parseInt(localStorage.getItem(key) || "0", 10);
+            currentTime += 1; // add 1 second
+            localStorage.setItem(key, currentTime);
+        }, 1000);
+    };
 
-      
-          return () => {
+    const stopPlaytimeCounter = () => {
+        if (playtimeIntervalRef.current) {
+            clearInterval(playtimeIntervalRef.current);
+            playtimeIntervalRef.current = null;
+        }
+    };
+    // --------------------------
+
+    useEffect(() => {
+        ipcRenderer.on('install-complete', (event, modpackId) => {
+            modpackId = modpackId.toString().trim();
+            const currentModpackId = mp.id.toString().trim();
+            fetchData();
+
+            if (modpackId === currentModpackId) {
+                localStorage.setItem(`lastInstalledVersion${mp && mp.id}`, JSON.stringify(mp.mainVersion));
+                setInstalledVersion(mp.mainVersion);
+                setIsInstalling(false);
+                setVerInstalling(null);
+                setProgress(100);
+            }
+        });
+
+        ipcRenderer.on('game-launched', (event, modpackId) => {
+            modpackId = modpackId.toString().trim();
+            if (modpackId === mp.id) {
+                setIsInstalling(false);
+                setGameRunning(true);
+                setProgress(100);
+                startPlaytimeCounter(mp.id); // start tracking playtime
+            }
+        });
+
+        ipcRenderer.on('error-launching', (event, modpackId) => {
+            modpackId = modpackId.toString().trim();
+            if (modpackId === mp.id) {
+                setIsInstalling(false);
+                setGameRunning(false);
+                setButtonText("PLAY");
+                setProgress(100);
+                stopPlaytimeCounter();
+            }
+        });
+
+        ipcRenderer.on('game-closed', (event, modpackId) => {
+            if (modpackId === mp.id) {
+                setGameRunning(false);
+                setProgress(100);
+                stopPlaytimeCounter(); // stop tracking playtime
+            }
+        });
+
+        ipcRenderer.on('uninstall-complete', (event, modpackId) => {
+            if (modpackId === mp.id) {
+                setInstalledVersion(null);
+                setVerInstalling(null);
+                setShowUninstall(false);
+                setUpdate(false);
+                fetchData();
+                localStorage.removeItem(`lastInstalledVersion${mp && mp.id}`);
+                stopPlaytimeCounter();
+            }
+        });
+
+        ipcRenderer.on('update-progress', (event, prog, id, progText) => {
+            if (id === mp.id) {
+                handleProg(prog, progText);
+            }
+        });
+
+        return () => {
             ipcRenderer.removeAllListeners('install-complete');
             ipcRenderer.removeAllListeners('game-launched');
             ipcRenderer.removeAllListeners('update-progress');
             ipcRenderer.removeAllListeners('uninstall-complete');
             ipcRenderer.removeAllListeners('game-closed');
             ipcRenderer.removeAllListeners('error-launching');
-          };
-    
-      }, [mp]);
+            stopPlaytimeCounter();
+        };
+    }, [mp]);
 
-  return (
-    
-    <div className='main' style={style}>
-
-        {mp && (
-            <div className='main__modpack'>
-                {mp && mp.background && (
-                    <div className='main__modpack__background'>
-                        <img
-                            className='main__modpack__background__image'
-                            src={`https://minecraftmigos.tech/uploads/backgrounds/${mp.background}`}
-                        />
-                    </div>
-                )}
-                <div className='main__modpack__left'>
-                    <div className='main__modpack__name-wrapper'>
-                        <span className='main__modpack__name'>{mp.name}</span>
-                    </div>
-                    <div className='main__modpack__button-wrapper' style={{height: showOptions ? "20vh" : "15vh"}}>
-                        <div
-                            className={`main__modpack__button ${showStopGame ? "stop" : gameRunning ? "running" : ""}`}
-                            style={(mp.mainVersion && mp.mainVersion.zip === "null") || (mp.versions && mp.versions.length === 0) ? comingSoonStyle : update ? updateStyle : gameRunning ? runningStyle : showUninstall ? comingSoonStyle : defaultStyle}
-                            onClick={
-                                gameRunning ?  () => setShowStopGame(true)
-                                : isInstalling ? console.log("please wait for installation to finish")
-                                : (mp.mainVersion && mp.mainVersion.zip === "null") || (mp.versions && mp.versions.length === 0) ? console.log("coming soon!")
-                                : update ? () => handleInstallModpack(mp)
-                                : installedVersion ? () => handleLaunch()
-                                : () => handleInstallModpack(mp)}
+    return (
+        <div className='main' style={style}>
+            {mp && (
+                <div className='main__modpack'>
+                    {mp && mp.background && (
+                        <div className='main__modpack__background'>
+                            <img
+                                className='main__modpack__background__image'
+                                src={`https://minecraftmigos.tech/uploads/backgrounds/${mp.background}`}
+                            />
+                        </div>
+                    )}
+                    <div className='main__modpack__left'>
+                        <div className='main__modpack__name-wrapper'>
+                            <span className='main__modpack__name'>{mp.name}</span>
+                        </div>
+                        <div className='main__modpack__button-wrapper' style={{ height: showOptions ? "20vh" : "15vh" }}>
+                            <div
+                                className={`main__modpack__button ${showStopGame ? "stop" : gameRunning ? "running" : ""}`}
+                                style={(mp.mainVersion && mp.mainVersion.zip === "null") || (mp.versions && mp.versions.length === 0) ? comingSoonStyle : update ? updateStyle : gameRunning ? runningStyle : showUninstall ? comingSoonStyle : defaultStyle}
+                                onClick={
+                                    gameRunning ? () => setShowStopGame(true)
+                                        : isInstalling ? console.log("please wait for installation to finish")
+                                            : (mp.mainVersion && mp.mainVersion.zip === "null") || (mp.versions && mp.versions.length === 0) ? console.log("coming soon!")
+                                                : update ? () => handleInstallModpack(mp)
+                                                    : installedVersion ? () => handleLaunch()
+                                                        : () => handleInstallModpack(mp)}
                             >
-                              <span className='main__modpack__button-text'>
-                                {getModpackButtonText()}
-                              </span>
-                            {isInstalling && (<span className='main__modpack__button-text-install'>{installText}</span> )}
+                                <span className='main__modpack__button-text'>
+                                    {getModpackButtonText()}
+                                </span>
+                                {isInstalling && (<span className='main__modpack__button-text-install'>{installText}</span>)}
+                            </div>
+                            <div className={`main__modpack__button-options ${showOptions ? "show" : ""}`}>
+                                <span className='main__modpack__button-options-icon folder'><img src={folderIcon} className='main__modpack__button-options-img' onClick={() => { ipcRenderer.send('open-folder', mp.id); }} /></span>
+                                <span className='main__modpack__button-options-icon trash'><img src={trashIcon} className='main__modpack__button-options-img' onClick={toggleUninstall} /></span>
+                            </div>
+                            {installedVersion && (<span className='main__modpack__button-dots-wrapper' onClick={() => setShowOptions(prev => !prev)}><img className='main__modpack__button-dots' src={dots} /></span>)}
                         </div>
-                        <div className={`main__modpack__button-options ${showOptions ? "show" : ""}`}>
-                            <span className='main__modpack__button-options-icon folder'><img src={folderIcon} className='main__modpack__button-options-img' onClick={() => {ipcRenderer.send('open-folder', mp.id);}} /></span>
-                            <span className='main__modpack__button-options-icon trash'><img src={trashIcon} className='main__modpack__button-options-img' onClick={toggleUninstall} /></span>
-                        </div>
-                        {installedVersion && (<span className='main__modpack__button-dots-wrapper' onClick={() => setShowOptions(prev => !prev)}><img className='main__modpack__button-dots' src={dots} /></span>)}
+                    </div>
+                    <div className='main__modpack__right'>
+                        {showStopGame ? (
+                            <div className='main__stop'>
+                                <div className='main__stop__overlay' onClick={() => setShowStopGame(false)} />
+                                <p className='main__stop__text'>ARE YOU SURE YOU WANT TO CLOSE THIS INSTANCE?</p>
+                                <div className='main__stop__buttons'>
+                                    <button className='main__stop__buttons-button yes' onClick={() => handleStopGame()}>YES</button>
+                                    <button className='main__stop__buttons-button no' onClick={() => setShowStopGame(false)}>NO</button>
+                                </div>
+                            </div>
+                        ) : (
+                            showUninstall ? (
+                                <div className='main__uninstall'>
+                                    <div className='main__uninstall__overlay' onClick={toggleUninstall} />
+                                    <p className='main__uninstall__text'>ARE YOU SURE YOU WANT TO UNINSTALL THIS MODPACK?</p>
+                                    <div className='main__uninstall__buttons'>
+                                        <button className='main__uninstall__buttons-button yes' onClick={() => { ipcRenderer.send('delete-modpack', mp.id); setShowUninstall(false); localStorage.removeItem(`lastInstalledVersion${mp && mp.id}`); }}>YES</button>
+                                        <button className='main__uninstall__buttons-button no' onClick={toggleUninstall}>NO</button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <Changelog versions={mp && mp.versions} />
+                            )
+                        )}
                     </div>
                 </div>
-                <div className='main__modpack__right'>
-                  {showStopGame ? (
-                      <div className='main__stop'>
-                        <div className='main__stop__overlay' onClick={() => setShowStopGame(false)} />
-                          <p className='main__stop__text'>ARE YOU SURE YOU WANT TO CLOSE THIS INSTANCE?</p>
-                          <div className='main__stop__buttons'>
-                            <button className='main__stop__buttons-button yes' onClick={() => handleStopGame()}>YES</button>
-                            <button className='main__stop__buttons-button no' onClick={() => setShowStopGame(false)}>NO</button>
-                        </div>
-                      </div>
-                  ) : (
-                  showUninstall ? (
-                    <div className='main__uninstall'>
-                    <div className='main__uninstall__overlay' onClick={toggleUninstall} />
-                      <p className='main__uninstall__text'>ARE YOU SURE YOU WANT TO UNINSTALL THIS MODPACK?</p>
-                      <div className='main__uninstall__buttons'>
-                        <button className='main__uninstall__buttons-button yes' onClick={() => {ipcRenderer.send('delete-modpack', mp.id); setShowUninstall(false); localStorage.removeItem(`lastInstalledVersion${mp && mp.id}`);}}>YES</button>
-                        <button className='main__uninstall__buttons-button no' onClick={toggleUninstall}>NO</button>
-                      </div>
-                    </div>
-                  ) : (
-                    <Changelog versions={mp && mp.versions} />
-                  )
-                  )}
-                </div>
-            </div>
-        )}
+            )}
+        </div>
+    );
+};
 
-
-
-
-
-
-    </div>
-  )
-}
-
-export default Main
+export default Main;

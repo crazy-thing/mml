@@ -13,7 +13,7 @@ namespace MMLCLI.Models
         public  string liteZip { get; set; }
         public  string serverZip { get; set; }   
         public  string size { get; set; }
-        public bool clean { get; set; }
+        public object clean { get; set; }
         public string mcVersion { get; set; }
         public  string modLoader { get; set; }
         public string build { get; set; } 
